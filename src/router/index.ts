@@ -5,6 +5,11 @@ const routes:Array<RouteRecordRaw> = [
     path:"/",
     name:"Index",
     component:()=>import("@/views/index.vue")
+  },
+  {
+    path:'/ActivitiesApplication',
+    name:'ActivitiesApplication',
+    component:()=>import('@/views/activitiesApplication.vue')
   }
 ]
 

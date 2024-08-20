@@ -20,11 +20,6 @@ request.interceptors.request.use(
   //方法返回一个带有拒绝原因的 Promise 对象。
   error => Promise.reject(error)
 );
-/**************移除拦截器****************/
-  // 动态移除
-  // const me = axios.interceptors.request.use(function () {/*...*/});
-  // axios.interceptors.request.eject(me);
-/***************************************/
 
 //响应拦截器（对请求结束后进行一些操作，，例如:统一收集报错）
 request.interceptors.response.use(
@@ -41,8 +36,3 @@ request.interceptors.response.use(
 );
 
 export default request
-————————————————
-
-                          版权声明：本文为博主原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接和本声明。
-                      
-原文链接：https://blog.csdn.net/weixin_46612230/article/details/125983510
