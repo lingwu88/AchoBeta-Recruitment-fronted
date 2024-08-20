@@ -5,16 +5,22 @@ defineOptions({
   name:"activitiesCard"
 })
 
+const emit = defineEmits(['toApplication'])
+
 const prop = defineProps({
   title:PropTypes.string.def('暂无招新活动'),
   description:PropTypes.string.def('暂无招新活动内容'),
   startTime:PropTypes.string.def('1999-7-7 12:12:12'),
   endTime:PropTypes.string.def('2100-1-1 5:20:99')
 })
+
+const toActivities=()=>{
+  emit('toApplication')
+}
 </script>
 
 <template>
-  <div class="card">
+  <div class="card" @click="toActivities">
     <n-flex vertical class="card-layout">
       <div class="title">{{ prop.title }}</div>
       <div class="description">{{ prop.description }}</div>

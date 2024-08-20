@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import ActivitiesCard from '@/components/activitiesCard.vue';
 import Introduce from '@/components/Introduce.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
 
 const carouselPhoto =[
   {
@@ -41,6 +44,10 @@ const teamPhoto= [
     alt:'暂时无法接收图片'
   },
 ]
+
+const toApplication=()=>{
+  router.push({path:'/activitiesApplication'})
+}
 </script>
 
 <template>
@@ -61,7 +68,7 @@ const teamPhoto= [
         <p class="chinese-title"><b>招新活动</b></p>
       </template>
       <template #content>
-        <activitiesCard></activitiesCard>
+        <activitiesCard @toApplication="toApplication"></activitiesCard>
         <activitiesCard></activitiesCard>
       </template>
     </Introduce>
