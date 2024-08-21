@@ -1,9 +1,17 @@
 <script setup>
 import { PropTypes } from '@/utils/propTypes';
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 const activities = defineProps({
   title:PropTypes.string.def('招新活动标题'),
   content:PropTypes.string.def('招新活动详情附件是打卡练腹肌绿卡的是捷克洛夫就爱看快放假啊拉开圣诞节分厘卡机了积分卡大家发了几十块的垃圾扣十分艰苦拉萨')
 })
+
+const toResume = ()=>{
+  router.push('/activitiesLayout')
+}
 </script>
 
 <template>
@@ -18,7 +26,7 @@ const activities = defineProps({
     <div class="activities-content">{{ activities.content }}</div>
   </template>
     <template #action>
-      <n-button type="success" class="application-button">
+      <n-button type="success" class="application-button" @click="toResume">
        投递简历
       </n-button>
     </template>

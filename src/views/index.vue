@@ -69,7 +69,7 @@ const toApplication=()=>{
       </template>
       <template #content>
         <activitiesCard @toApplication="toApplication"></activitiesCard>
-        <activitiesCard></activitiesCard>
+        <activitiesCard @toApplication="toApplication"></activitiesCard>
       </template>
     </Introduce>
     <Introduce>
