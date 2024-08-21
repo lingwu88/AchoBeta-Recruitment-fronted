@@ -10,6 +10,19 @@ const routes:Array<RouteRecordRaw> = [
     path:'/ActivitiesApplication',
     name:'ActivitiesApplication',
     component:()=>import('@/views/activitiesApplication.vue')
+  },
+  {
+    path:'/activitiesLayout',
+    name:'activitiesLayout',
+    component:()=>import('@/views/activitiesLayout.vue'),
+    redirect:'/activitiesLayout/resume',
+    children:[
+      {
+        path:'/activitiesLayout/resume',
+        name:'resume',
+        component:()=>import('@/views/resume.vue')
+      }
+    ]
   }
 ]
 
