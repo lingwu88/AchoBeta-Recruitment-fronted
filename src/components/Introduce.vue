@@ -21,7 +21,7 @@ defineOptions({
 <style scoped>
 .introduce-box{
   width: 100vw;
-  height: 400px;
+  height:auto;
   background-color: inherit;
 }
 </style>
