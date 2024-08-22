@@ -1,11 +1,13 @@
 <script lang="ts" setup>
-import navigation from '@/components/navigation.vue'
+import navigationBottom from '@/components/navigationBottom.vue'
+import navigationTop from '@/components/navigationTop.vue'
 </script>
 
 <template>
   <div class="activitiesLayout">
-    <routerView></routerView>
-    <navigation class="navigation"></navigation>
+    <navigationTop></navigationTop>
+    <routerView ></routerView>
+    <navigationBottom class="navigation" ></navigationBottom>
   </div>
 </template>
 
@@ -16,7 +18,8 @@ import navigation from '@/components/navigation.vue'
   background-color: #A1C4FD;
 }
 .navigation{
-  position: fixed;
+  margin: 2vh 0 0 0 ;
+  position: sticky;
   bottom: 3vh;
   left: 5vw;
 }
