@@ -42,6 +42,7 @@ const toActivities=()=>{
   font-family: "宋体";
   border-radius: 10px;
   box-shadow:  2px 9px 20px #d5d5d5;
+  margin-bottom: 10px;
 }
 .card-layout{
   padding: 5%;

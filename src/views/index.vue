@@ -2,6 +2,8 @@
 import ActivitiesCard from '@/components/activitiesCard.vue';
 import Introduce from '@/components/Introduce.vue';
 import { useRouter } from 'vue-router';
+import processIntroduce from '@/components/processIntroduce.vue'
+import navigationTop from '@/components/navigationTop.vue'
 
 const router = useRouter()
 
@@ -51,6 +53,7 @@ const toApplication=()=>{
 </script>
 
 <template>
+  <navigationTop class="top"></navigationTop>
   <n-flex vertical class="layout">
     <n-carousel draggable autoplay class="carousel-box">
       <img
@@ -61,11 +64,11 @@ const toApplication=()=>{
       />
     </n-carousel>
     <Introduce>
-      <template #english-title>
-        <p class="english-title">Recruitment activities</p>
-      </template>
-      <template #chinese-title>
-        <p class="chinese-title"><b>招新活动</b></p>
+      <template #title>
+        <div class="card-title">
+          <p class="english-title">Recruitment activities</p>
+          <p class="chinese-title"><b>招新活动</b></p>
+        </div>
       </template>
       <template #content>
         <activitiesCard @toApplication="toApplication"></activitiesCard>
@@ -73,22 +76,22 @@ const toApplication=()=>{
       </template>
     </Introduce>
     <Introduce>
-      <template #english-title>
-        <p class="english-title">Recruitment process</p>
-      </template>
-      <template #chinese-title>
-        <p class="chinese-title"><b>招新流程</b></p>
+      <template #title>
+        <div  class="card-title">
+          <p class="english-title">Recruitment process</p>
+          <p class="chinese-title"><b>招新流程</b></p>
+        </div>
       </template>
       <template #content>
-        <activitiesCard></activitiesCard>
+        <processIntroduce></processIntroduce>
       </template>
     </Introduce>
     <Introduce>
-      <template #english-title>
-        <p class="english-title">Team Introduction</p>
-      </template>
-      <template #chinese-title>
-        <p class="chinese-title"><b>团队介绍</b></p>
+      <template #title>
+        <div  class="card-title">
+          <p class="english-title">Team Introduction</p>
+          <p class="chinese-title"><b>团队介绍</b></p>
+        </div>
       </template>
       <template #content>
         <n-carousel
@@ -112,6 +115,11 @@ const toApplication=()=>{
 </template>
 
 <style scoped>
+.top{
+  z-index: 999;
+  position: sticky;
+  top: 0;
+}
 .english-title{
   font-family: '华文隶书';
   font-size: 1.4rem;
@@ -120,7 +128,7 @@ const toApplication=()=>{
 .layout{
   width: 100vw;
   height:auto;
-  background-color: rgba(255, 255, 255, 0.963);
+  background-color: rgba(255, 255, 255, 0.612);
 }
 .chinese-title{
   font-family: '楷体';
@@ -134,5 +142,9 @@ const toApplication=()=>{
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+.card-title{
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 </style>
