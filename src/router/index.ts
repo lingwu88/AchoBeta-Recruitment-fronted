@@ -7,6 +7,11 @@ const routes:Array<RouteRecordRaw> = [
     component:()=>import("@/views/index.vue")
   },
   {
+    path:'/login',
+    name:'login',
+    component:()=>import('@/views/login.vue')
+  },
+  {
     path:'/ActivitiesApplication',
     name:'ActivitiesApplication',
     component:()=>import('@/views/activitiesApplication.vue')
@@ -21,6 +26,16 @@ const routes:Array<RouteRecordRaw> = [
         path:'/activitiesLayout/resume',
         name:'resume',
         component:()=>import('@/views/resume.vue')
+      },
+      {
+        path:'/activitiesLayout/question',
+        name:'question',
+        component:()=>import('@/views/questionNaire.vue')
+      },
+      {
+        path:'/activitiesLayout/interview',
+        name:'interview',
+        component:()=>import('@/views/interview.vue')
       }
     ]
   }
