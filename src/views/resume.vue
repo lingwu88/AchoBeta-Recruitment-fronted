@@ -2,6 +2,7 @@
 import {formType} from '@/utils/formType'
 import {ref} from 'vue'
 import titleBlock from '@/components/titleBlock.vue'
+import Add12Filled from '@vicons/fluent/Add12Filled'
 const options=[
   {
     label:1,
@@ -56,6 +57,11 @@ const submit=()=>{
 </script>
 
 <template>
+  <n-h1 class="header-description">
+    <n-text type="primary">
+      XXXX活动
+    </n-text>
+  </n-h1>
   <n-form
     :model="form"
     label-align="left"
@@ -63,7 +69,6 @@ const submit=()=>{
     label-width="10vw"
     class="form"
   >
-  <div class="space"></div>
   <titleBlock title="个人信息" class="title"></titleBlock>
     <n-form-item label="证件照" class="label-width" required>
       <n-upload
@@ -136,8 +141,8 @@ const submit=()=>{
       >
         <n-upload-dragger>
           <div style="margin-bottom: 12px">
-            <n-icon size="48" :depth="3">
-              <ArchiveIcon />
+            <n-icon size="48" :depth="2">
+              <Add12Filled />
             </n-icon>
           </div>
           <n-text style="font-size: 16px">
@@ -156,6 +161,9 @@ const submit=()=>{
 </template>
 
 <style scoped>
+.header-description{
+  margin: 2vh 0 0 2vw;
+}
 .label-width{
   margin: 0 0 0 3vw;
 }
