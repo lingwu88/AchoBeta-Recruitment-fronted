@@ -11,13 +11,11 @@ defineOptions({
       justify="space-between"
     >
       <n-avatar
-      :size="45"
       src="../src/assets/achobeta.jpg"
       class="avatar-left"
       />
       <n-avatar
       round
-      size="medium"
       src="../src/assets/avatar.jpg"
       class="avatar-right"
       />
@@ -35,9 +33,13 @@ defineOptions({
   width: 100%;
 }
 .avatar-left{
+  width: auto;
   margin: 0 0 0 5vw;
+  height: 7vh;
 }
 .avatar-right{
   margin:0.5vh 10vw 0 0;
+  height: 6vh;
+  width: auto;
 }
 </style>
