@@ -10,14 +10,15 @@ const prop=defineProps({
 
 <template>
   <div>
-    <p class="title">{{ prop.title }}</p>
+    <p class="title-p">{{ prop.title }}</p>
     <div class="title-border"></div>
   </div>
 </template>
 
 <style scoped>
-.title{
+.title-p{
   font-size: 1.1rem;
+  margin: 0;
 }
 .title-border{
   height: 1rem;
