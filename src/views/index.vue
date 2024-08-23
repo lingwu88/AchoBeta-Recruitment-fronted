@@ -4,6 +4,8 @@ import Introduce from '@/components/Introduce.vue';
 import { useRouter } from 'vue-router';
 import processIntroduce from '@/components/processIntroduce.vue'
 import navigationTop from '@/components/navigationTop.vue'
+import { onMounted } from 'vue'
+import scroollTo from '@/utils/scroollTo'
 
 const router = useRouter()
 
@@ -50,10 +52,15 @@ const teamPhoto= [
 const toApplication=()=>{
   router.push({path:'/activitiesApplication'})
 }
+
+onMounted(()=>{
+  scroollTo()
+})
 </script>
 
 <template>
   <navigationTop class="top"></navigationTop>
+  <n-back-top :right="10" />
   <n-flex vertical class="layout">
     <n-carousel draggable autoplay class="carousel-box">
       <img
@@ -119,6 +126,9 @@ const toApplication=()=>{
   z-index: 999;
   position: sticky;
   top: 0;
+}
+.float-button{
+  z-index: 999;
 }
 .english-title{
   font-family: '华文隶书';

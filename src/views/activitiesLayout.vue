@@ -1,6 +1,12 @@
 <script lang="ts" setup>
+import { onMounted } from 'vue'
 import navigationBottom from '@/components/navigationBottom.vue'
 import navigationTop from '@/components/navigationTop.vue'
+import scroollTo from '@/utils/scroollTo'
+
+onMounted(()=>{
+  scroollTo()
+})
 </script>
 
 <template>

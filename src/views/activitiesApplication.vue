@@ -1,6 +1,8 @@
 <script setup>
 import { PropTypes } from '@/utils/propTypes';
 import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
+import scroollTo from '@/utils/scroollTo'
 import  titleBlock from '@/components/titleBlock.vue'
 import  navigationTop from '@/components/navigationTop.vue'
 
@@ -14,6 +16,10 @@ const activities = defineProps({
 const toResume = ()=>{
   router.push('/activitiesLayout')
 }
+
+onMounted(()=>{
+  scroollTo()
+})
 </script>
 
 <template>
@@ -48,7 +54,7 @@ const toResume = ()=>{
   position: sticky;
   top: 0;
 }
-.activities-layout ::v-deep .n-card__footer{
+.activities-layout :deep .n-card__footer{
   padding: 0;
 }
 .application-button{
@@ -65,7 +71,7 @@ const toResume = ()=>{
 }
 .title{
   margin: 0 0 0 4vw;
-  font-size: 1.4rem!important;
+  font-size: 1.2rem;
 }
 .activities-title{
   font-size: 1.4rem;
