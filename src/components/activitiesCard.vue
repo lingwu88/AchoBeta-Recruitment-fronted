@@ -1,6 +1,6 @@
 <script setup>
 import { PropTypes } from '@/utils/propTypes';
-
+import AngleDoubleRight from '@vicons/fa/AngleDoubleRight'
 defineOptions({
   name:"activitiesCard"
 })
@@ -8,9 +8,8 @@ defineOptions({
 const emit = defineEmits(['toApplication'])
 
 const prop = defineProps({
-  title:PropTypes.string.def('暂无招新活动'),
-  description:PropTypes.string.def('暂无招新活动内容'),
-  startTime:PropTypes.string.def('1999-7-7 12:12:12'),
+  title:PropTypes.string.def('暂无招新批次'),
+  batchId:PropTypes.number.def(1),
   endTime:PropTypes.string.def('2100-1-1 5:20:99')
 })
 
@@ -21,10 +20,15 @@ const toActivities=()=>{
 
 <template>
   <div class="card" @click="toActivities">
+    <n-flex justify="start">
     <n-flex vertical class="card-layout">
       <div class="title">{{ prop.title }}</div>
-      <div class="description">{{ prop.description }}</div>
-      <div class="time"><p>时间： <span>{{ prop.startTime }}</span> — <span>{{ prop.endTime }}</span></p></div>
+      <div class="description"><span>招新批次:</span>{{ prop.batchId }}</div>
+      <div class="time"><p>截止时间：<span>{{ prop.endTime }}</span></p></div>
+    </n-flex>
+    <n-icon :size="26" color="#db7b00">
+      <AngleDoubleRight class="card-icon"/>
+    </n-icon>
     </n-flex>
   </div>
 </template>
@@ -58,5 +62,9 @@ const toActivities=()=>{
 .time{
   font-size: 0.8rem;
   font-weight: 400;
+}
+.card-icon{
+  flex-grow: 1;
+  padding: 6.5vh 0 0 12vw;
 }
 </style>

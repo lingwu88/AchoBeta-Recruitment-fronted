@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ActivitiesCard: typeof import('./src/components/activitiesCard.vue')['default']
+    InterviewArrangement: typeof import('./src/components/interviewArrangement.vue')['default']
     InterviewResult: typeof import('./src/components/interviewResult.vue')['default']
     Introduce: typeof import('./src/components/Introduce.vue')['default']
     NAutoComplete: typeof import('naive-ui')['NAutoComplete']
