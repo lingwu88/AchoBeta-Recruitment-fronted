@@ -74,7 +74,7 @@ onMounted(()=>{
       <template #title>
         <div class="card-title">
           <p class="english-title">Recruitment activities</p>
-          <p class="chinese-title"><b>招新活动</b></p>
+          <p class="chinese-title">招新批次</p>
         </div>
       </template>
       <template #content>
@@ -143,6 +143,7 @@ onMounted(()=>{
 .chinese-title{
   font-family: '楷体';
   font-size: 1.5rem;
+  font-weight: bold;
   padding-left: 3%;
 }
 .carousel-box{

@@ -69,7 +69,7 @@ const comments=ref<commentType>(
                 <p class="comment-title">建议</p>
                 <p class="comment-content">{{ comments.suggest }}</p>
               </div>
-              <div>
+              <div class="last-comment">
                 <p class="comment-title">面试视频</p>
                 <a :href="comments.playback" class="comment-content">点我跳转😫👩‍👧‍👦</a>
               </div>
@@ -99,7 +99,7 @@ const comments=ref<commentType>(
   border: 0;
   box-shadow: 0 0 10px rgb(137, 148, 173) ;
   font-family: '楷体';
-  padding: 0 0 2vh 0;
+  padding: 0;
 }
 .interview-collapse :deep .n-collapse-item__header-main{
   font-size: 1.1rem;
@@ -114,9 +114,13 @@ const comments=ref<commentType>(
   font-size: 1rem;
 }
 .comment-content{
-  padding: 0 0 0 8vw ;
+  padding: 0 2vw 0 8vw ;
+  font-size: 0.9rem;
 }
 .comment-icon{
   padding: 1vh 0 0 8vw;
+}
+.last-comment{
+  padding: 0 0 2vh 0;
 }
 </style>
