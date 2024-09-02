@@ -12,20 +12,30 @@ const routes:Array<RouteRecordRaw> = [
     component:()=>import('@/views/login.vue')
   },
   {
-    path:'/ActivitiesApplication',
-    name:'ActivitiesApplication',
-    component:()=>import('@/views/activitiesApplication.vue')
+    path:'/glanceActivities',
+    name:'glanceActivities',
+    component:()=>import('@/views/glanceActivities.vue')
+  },
+  {
+    path:'/resume',
+    name:'resume',
+    component:()=>import('@/views/resume.vue')
+  },
+  {
+    path:'/errPage',
+    name:'errPage',
+    component:()=>import('@/views/errPage.vue')
   },
   {
     path:'/activitiesLayout',
     name:'activitiesLayout',
     component:()=>import('@/views/activitiesLayout.vue'),
-    redirect:'/activitiesLayout/resume',
+    redirect:'/activitiesLayout/activities',
     children:[
       {
-        path:'/activitiesLayout/resume',
-        name:'resume',
-        component:()=>import('@/views/resume.vue')
+        path:'/activitiesLayout/activity',
+        name:'activity',
+        component:()=>import('@/views/activitiesApplication.vue')
       },
       {
         path:'/activitiesLayout/question',
@@ -36,6 +46,11 @@ const routes:Array<RouteRecordRaw> = [
         path:'/activitiesLayout/interview',
         name:'interview',
         component:()=>import('@/views/interview.vue')
+      },
+      {
+        path:'/activitiesLayout/interviewDetailed',
+        name:'interviewDetailed',
+        component:()=>import('@/views/interviewDetailed.vue')
       }
     ]
   }

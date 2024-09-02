@@ -26,7 +26,6 @@ const comments=ref<commentType>(
     <titleBlock title="面试评价" class="title"></titleBlock>
     <n-collapse arrow-placement="right" class="interview-collapse">
       <n-collapse-item title="面评总结" name="1">
-        <n-collapse>
           <div>
             <n-flex vertical>
               <div>
@@ -75,7 +74,6 @@ const comments=ref<commentType>(
               </div>
             </n-flex>
           </div>
-        </n-collapse>
       </n-collapse-item>
     </n-collapse>
   </div>

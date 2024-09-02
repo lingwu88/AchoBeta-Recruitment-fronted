@@ -1,10 +1,10 @@
 export interface formType{
   stuSimpleResumeDTO:{
-    batchId: bigint|null,    //招新批次
+    batchId: number|null,    //招新批次
     studentId:string|null,       //学号
     name:string|null,   //姓名
-    gender:bigint|null, //性别
-    grade:bigint|null,  //年级
+    gender:number|null, //性别
+    grade:number|null,  //年级
     major:string|null,  //专业
     className:string|null,  //班级
     email:string|null,  //邮箱
@@ -16,8 +16,10 @@ export interface formType{
     awards:string|null, //获奖经历
     remark:string|null //备注
   },
-  stuAttachmentDTOList:{
+  stuAttachmentDTOList:[
+    {
     filename:string|null, //文件名
     attachment:string|null //附件列表
-  }
+    }
+  ]
 }

@@ -15,6 +15,21 @@ const questionNaire=ref([
     number:'3',
     question:'你有什么想问AB的问题吗?',
     answer:''
+  },
+  {
+    number:'1',
+    question:'你为什么想来AB',
+    answer:''
+  },
+  {
+    number:'2',
+    question:'你为什么想做游戏',
+    answer:''
+  },
+  {
+    number:'3',
+    question:'你有什么想问AB的问题吗?',
+    answer:''
   }
 ])
 
@@ -53,7 +68,7 @@ const submit=()=>{
 .form-layout{
   margin: 2vh 0 0 0;
   width: 100vw;
-  min-height: 80vh;
+  min-height: 70vh;
 }
 .label-width{
   margin: 0 0 0 3vw;

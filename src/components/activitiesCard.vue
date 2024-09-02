@@ -1,39 +1,43 @@
-<script setup>
-import { PropTypes } from '@/utils/propTypes';
+<script lang="ts" setup>
+// import { PropTypes } from '@/utils/propTypes';
+// import { cardType } from '@/utils/cardType'
 import AngleDoubleRight from '@vicons/fa/AngleDoubleRight'
 defineOptions({
   name:"activitiesCard"
 })
 
-const emit = defineEmits(['toApplication'])
+const emit = defineEmits(['toAnother'])
 
 const prop = defineProps({
-  title:PropTypes.string.def('暂无招新批次'),
-  batchId:PropTypes.number.def(1),
-  endTime:PropTypes.string.def('2100-1-1 5:20:99')
+  cardMain:{
+    type:Object,
+    default: () => ({
+      title: '暂无招新批次',
+      content: '卡片内容',
+      footer: '卡片底部内容'
+    })
+  }
 })
 
-const toActivities=()=>{
-  emit('toApplication')
+const toAnother=()=>{
+  emit('toAnother')
 }
 </script>
 
 <template>
-  <div class="card" @click="toActivities">
+  <div class="card" @click="toAnother">
     <n-flex justify="start">
     <n-flex vertical class="card-layout">
-      <div class="title">{{ prop.title }}</div>
-      <div class="description"><span>招新批次:</span>{{ prop.batchId }}</div>
-      <div class="time"><p>截止时间：<span>{{ prop.endTime }}</span></p></div>
+      <div class="title">{{ prop.cardMain.title }}</div>
+      <div class="description">{{ prop.cardMain.content }}</div>
+      <div class="time"><p>{{ prop.cardMain.footer }}</p></div>
     </n-flex>
-    <n-icon :size="26" color="#db7b00">
       <AngleDoubleRight class="card-icon"/>
-    </n-icon>
     </n-flex>
   </div>
 </template>
 
-<style>
+<style scoped>
 *{
   margin: 0;
   padding: 0;
@@ -49,7 +53,10 @@ const toActivities=()=>{
   margin-bottom: 10px;
 }
 .card-layout{
+  width:30vw;
+  flex-grow: 1;
   padding: 5%;
+  min-height: 10vh;
 }
 .title{
   font-size: 1rem;
@@ -64,7 +71,11 @@ const toActivities=()=>{
   font-weight: 400;
 }
 .card-icon{
-  flex-grow: 1;
-  padding: 6.5vh 0 0 12vw;
+  flex-grow: 0.5;
+  height: 10vmin;
+  width: 10vmin;
+  color: #e17a3a;
+  padding: 5vh 0 0 0;
 }
+
 </style>
