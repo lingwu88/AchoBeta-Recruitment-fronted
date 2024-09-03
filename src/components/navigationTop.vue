@@ -29,7 +29,8 @@ const toAnother=((path:number)=>{
   switch (path) {
     case 1:router.push('/');break;
     case 2:router.push('/');break;
-    case 3:router.push('/login');break;
+    case 3:router.push('/person');break;
+    case 4:router.push('/login');break;
   }
 })
 </script>

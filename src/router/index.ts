@@ -7,6 +7,11 @@ const routes:Array<RouteRecordRaw> = [
     component:()=>import("@/views/index.vue")
   },
   {
+    path:'/person',
+    name:'person',
+    component:()=>import('@/views/person.vue')
+  },
+  {
     path:'/login',
     name:'login',
     component:()=>import('@/views/login.vue')
