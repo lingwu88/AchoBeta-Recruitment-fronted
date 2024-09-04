@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router';
 import processIntroduce from '@/components/processIntroduce.vue'
 import navigationTop from '@/components/navigationTop.vue'
 import { ref,onMounted } from 'vue'
+import { useIdStore } from '@/store/idStore'
 import { useStore } from '@/store/index'
 import { getBatch } from '@/api/api'
 import { cardType } from '@/utils/cardType'
@@ -12,16 +13,16 @@ import { batchType } from '@/utils/batchType.ts'
 import scroollTo from '@/utils/scroollTo'
 import { createDiscreteApi } from 'naive-ui'
 
-const {message} = createDiscreteApi(['message'])
-// const cardDescription=ref<cardType[]>([{
-//   title:'暂无招新批次',
-//   content:'暂无招新批次',
-//   footer:'暂无招新批次'
-// }])
 type BatchCardType = {
   id: string;
   cardDescription: cardType;
 };
+
+
+const {message} = createDiscreteApi(['message'])
+const router = useRouter()
+const storage=useStore()
+const idStore=useIdStore()
 
 const batchCard=ref<BatchCardType[]>([
   {
@@ -34,8 +35,6 @@ const batchCard=ref<BatchCardType[]>([
   }
 ])
 
-const router = useRouter()
-const storage=useStore()
 const carouselPhoto =[
   {
     class:'carousel-img',
@@ -77,7 +76,12 @@ const teamPhoto= [
 ]
 
 const toApplication=(id:string,tit:string)=>{
-  router.push({path:'/resume',query:{title:tit,batchId:id}})
+  let batchId=''
+  idStore.setBatchId(id)
+  batchId=idStore.getBatchId()
+  console.log(batchId);
+  
+  router.push({path:'/resume'})
 }
 
 onMounted(()=>{
