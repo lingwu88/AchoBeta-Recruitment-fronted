@@ -18,7 +18,6 @@ type BatchCardType = {
   cardDescription: cardType;
 };
 
-
 const {message} = createDiscreteApi(['message'])
 const router = useRouter()
 const storage=useStore()
@@ -76,6 +75,8 @@ const teamPhoto= [
 ]
 
 const toApplication=(id:string,tit:string)=>{
+  console.log(tit);
+  
   let batchId=''
   idStore.setBatchId(id)
   batchId=idStore.getBatchId()
@@ -108,8 +109,7 @@ onMounted(()=>{
     }
     else if(res.data.code==2009){       //如果已失效
       console.log('无token');
-      
-      router.push('/login')
+      router.push('/login'); 
     }
     else
       message.error(res.data.message)

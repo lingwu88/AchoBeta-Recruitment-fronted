@@ -5,7 +5,7 @@
 
 <template>
   <n-message-provider placement="top" :max='3'>
-  <router-view></router-view>
+    <routerView></routerView>
   </n-message-provider>
 </template>
 

@@ -82,7 +82,7 @@ const toAnother=((path:number)=>{
 }
 .avatar-left p{
   padding:0 0 0 2vw;
-  background: url('src/assets/text_background.jpg') no-repeat;
+  background: url('/src/assets/text_background.jpg') no-repeat;
   background-size: cover;
   background-clip: text;
   color:transparent;
