@@ -10,9 +10,11 @@ import Add12Filled from '@vicons/fluent/Add12Filled'
 import { submitResume } from '@/api/api'
 import { queryResume } from '@/api/api'
 import { useStore } from '@/store/index'
+import { useIdStore } from '@/store/idStore'
 // import type { UploadCustomRequestOptions } from 'naive-ui'
 import { useMessage } from 'naive-ui'
 
+const idStore=useIdStore()
 const storage=useStore()
 const message=useMessage()
 const title = ref<string>('')
@@ -143,7 +145,9 @@ const toActivities=()=>{
 }
 
 onMounted(()=>{
-  form.value.stuSimpleResumeDTO.batchId=parseInt(params.batchId as string)      //将上个页面选择的id，送到当前页面作为不可更改批次使用
+  form.value.stuSimpleResumeDTO.batchId=parseInt(idStore.getBatchId())      //将上个页面选择的id，送到当前页面作为不可更改批次使用
+  console.log(form.value.stuSimpleResumeDTO.batchId);
+  
   title.value = (params.title as string)
   queryResume((params.batchId as string ),storage.token).then(res=>{
     console.log(res);

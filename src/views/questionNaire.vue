@@ -40,25 +40,27 @@ const submit=()=>{
 </script>
 
 <template>
-  <n-h1 class="header-description">
-    <n-text type="primary">
-      XXXX活动问卷
-    </n-text>
-  </n-h1>
-   <n-form
-    :model="questionNaire"
-    class="form-layout"
-  >
-    <n-form-item :label="item.question"  class="label-width" v-for="item in questionNaire" :key="item.number">
-      <n-input v-model:value="item.answer" placeholder="输入姓名" type="textarea"  class="width"/>
-    </n-form-item>
-    <n-form-item >
-      <n-flex justify="space-around" class="flex-button">
-        <n-button type="success" @click="submit">提交简历</n-button>
-        <n-button type="info" @click="submit">存为草稿</n-button>
-      </n-flex>
-    </n-form-item>
-  </n-form>
+  <div>
+    <n-h1 class="header-description">
+      <n-text type="primary">
+        XXXX活动问卷
+      </n-text>
+    </n-h1>
+    <n-form
+      :model="questionNaire"
+      class="form-layout"
+    >
+      <n-form-item :label="item.question"  class="label-width" v-for="item in questionNaire" :key="item.number">
+        <n-input v-model:value="item.answer" placeholder="输入姓名" type="textarea"  class="width"/>
+      </n-form-item>
+      <n-form-item >
+        <n-flex justify="space-around" class="flex-button">
+          <n-button type="success" @click="submit">提交简历</n-button>
+          <n-button type="info" @click="submit">存为草稿</n-button>
+        </n-flex>
+      </n-form-item>
+    </n-form>
+  </div>
 </template>
 
 <style scoped>

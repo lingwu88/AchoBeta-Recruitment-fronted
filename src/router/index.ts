@@ -1,4 +1,9 @@
 import { createRouter,createWebHistory,RouteRecordRaw } from "vue-router";
+import { RouteMeta } from "vue-router";
+
+interface MyRouteMeta extends RouteMeta{
+  index?:number
+}
 
 const routes:Array<RouteRecordRaw> = [
   {
@@ -40,22 +45,34 @@ const routes:Array<RouteRecordRaw> = [
       {
         path:'/activitiesLayout/activity',
         name:'activity',
-        component:()=>import('@/views/activitiesApplication.vue')
+        component:()=>import('@/views/activitiesApplication.vue'),
+        meta:{
+          index:1
+        } as MyRouteMeta
       },
       {
         path:'/activitiesLayout/question',
         name:'question',
-        component:()=>import('@/views/questionNaire.vue')
+        component:()=>import('@/views/questionNaire.vue'),
+        meta:{
+          index:2
+        } as MyRouteMeta
       },
       {
         path:'/activitiesLayout/interview',
         name:'interview',
-        component:()=>import('@/views/interview.vue')
+        component:()=>import('@/views/interview.vue'),
+        meta:{
+          index:3
+        } as MyRouteMeta
       },
       {
         path:'/activitiesLayout/interviewDetailed',
         name:'interviewDetailed',
-        component:()=>import('@/views/interviewDetailed.vue')
+        component:()=>import('@/views/interviewDetailed.vue'),
+        meta:{
+          index:4
+        } as MyRouteMeta
       }
     ]
   }

@@ -41,10 +41,12 @@ const toAnother=((path:number)=>{
       class="flex-layout"
       justify="space-between"
     >
+    <div class="avatar-left">
       <n-avatar
       src="../src/assets/achoBeta.png"
-      class="avatar-left"
       />
+      <p>AchoBeta</p>
+    </div>
       <n-avatar
       round
       src="../src/assets/avatar.jpg"
@@ -74,6 +76,20 @@ const toAnother=((path:number)=>{
   width: auto;
   margin: 0 0 0 5vw;
   height: 7vh;
+  display:flex;
+  flex-wrap: nowrap;
+  /* flex-direction: column; */
+}
+.avatar-left p{
+  padding:0 0 0 2vw;
+  background: url('/src/assets/text_background.jpg') no-repeat;
+  background-size: cover;
+  background-clip: text;
+  color:transparent;
+  font-size:1.5rem;
+  font-family:'微软雅黑';
+  font-style:italic;
+  font-weight:bolder;
 }
 .avatar-right{
   margin:0.5vh 10vw 0 0;
