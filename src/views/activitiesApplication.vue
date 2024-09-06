@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useRouter , useRoute } from 'vue-router'
-import { onMounted } from 'vue'
+import { onMounted,ref } from 'vue'
 import { Activity } from '@/utils/activity'
 import scroollTo from '@/utils/scroollTo'
 import  titleBlock from '@/components/titleBlock.vue'
