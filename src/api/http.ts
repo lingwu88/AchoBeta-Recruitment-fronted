@@ -1,4 +1,7 @@
 import axios from 'axios'
+import { useStore } from '@/store/index'
+
+const storage = useStore()
 
 const request = axios.create({
   baseURL:'/',
@@ -23,16 +26,21 @@ request.interceptors.request.use(
 
 //响应拦截器（对请求结束后进行一些操作，，例如:统一收集报错）
 request.interceptors.response.use(
-  //请求成功
-  // res => res.status === 200 ? Promise.resolve(res) : Promise.reject(res),
-  // //请求失败
-  // error => {
-  //     //可根据不同的状态去区分不同的错误，达到不同效果
-  //     if(error.response.status){
-  //         error.response.status === 404 ? alert("请求不存在！！") : alert("其他");
-  //     }
-  //     return Promise.reject(error);
-  // }
+  res => {
+    if(res.headers.hasOwnProperty('token') && res.headers.token!=null){                 //对即将失效（失效前20o分钟内的token，进行无感刷新，而对于已失效的token，则一定是要跳转到登录页面）
+      storage.setToken(res.headers.token)                                               //重新覆盖为新的token
+    }
+    return Promise.resolve(res)
+  },      //将promise变为操作成功状态，并将res传递作为then方法的参数
+  //请求失败
+  error => {
+      // //可根据不同的状态去区分不同的错误，达到不同效果
+      // if(error.response.status){
+      //     error.response.status === 404 ? alert("请求不存在！！") : alert("其他");
+      // }
+      // return Promise.reject(error);
+      return Promise.reject(error)
+  }
 );
 
 export default request

@@ -5,23 +5,25 @@ import { useRouter } from 'vue-router';
 import processIntroduce from '@/components/processIntroduce.vue'
 import navigationTop from '@/components/navigationTop.vue'
 import { ref,onMounted } from 'vue'
-import { useIdStore } from '@/store/idStore'
 import { useStore } from '@/store/index'
 import { getBatch } from '@/api/api'
-import { cardType } from '@/utils/cardType'
-import { batchType } from '@/utils/batchType.ts'
+import { cardType } from '@/utils/type/cardType'
+import { batchType } from '@/utils/type/batchType.ts'
 import scroollTo from '@/utils/scroollTo'
-import { createDiscreteApi } from 'naive-ui'
+import { enCode } from '@/utils/URIProtect.ts'
+import { useMessage } from 'naive-ui'
+import { useIdStore } from '@/store/idStore.ts'
 
 type BatchCardType = {
   id: string;
   cardDescription: cardType;
 };
 
-const {message} = createDiscreteApi(['message'])
+
+const message=useMessage()
 const router = useRouter()
 const storage=useStore()
-const idStore=useIdStore()
+const IdStore = useIdStore()
 
 const batchCard=ref<BatchCardType[]>([
   {
@@ -75,14 +77,11 @@ const teamPhoto= [
 ]
 
 const toApplication=(id:string,tit:string)=>{
-  console.log(tit);
-  
-  let batchId=''
-  idStore.setBatchId(id)
-  batchId=idStore.getBatchId()
-  console.log(batchId);
-  
-  router.push({path:'/resume'})
+  console.log(tit);     //活动标题
+  IdStore.setBatchId(id)        //为页面设置batchId，当在页面路由进行跳转or刷新时，确保可以BatchId不消失
+
+  tit = enCode(tit)
+  router.push({path:'/resume',query:{title:tit}})
 }
 
 onMounted(()=>{

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { PropTypes } from '@/utils/propTypes';
+import { PropTypes } from '@/utils/type/propTypes';
 defineOptions({
   name:'titleBlock'
 })

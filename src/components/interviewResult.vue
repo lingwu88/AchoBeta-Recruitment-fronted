@@ -1,11 +1,21 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
-import {commentType} from '@/utils/commentType'
+import { ref,onMounted } from 'vue'
+import { commentType } from '@/utils/type/commentType'
 import titleBlock from '@/components/titleBlock.vue'
 import Hourglass from '@vicons/ionicons5/Hourglass'
+import { useStore } from '@/store/index'
+import { useIdStore } from '@/store/idStore'
+import { useMessage } from 'naive-ui'
+import { getInterviewComment } from '@/api/api'
+
 defineOptions({
   name:'interviewResult'
 })
+
+const interviewId = ref<string>('')
+const storage = useStore()
+const idStore = useIdStore()
+const message = useMessage()
 const comments=ref<commentType>(
   {
     id:1,
@@ -19,6 +29,29 @@ const comments=ref<commentType>(
     playback:'https://meeting.tencent.com/v2/cloud-record/share?id=23cbfbc6-723e-42ff-85aa-78f675dc3af8&from=3'
   }
 )
+
+onMounted(()=>{
+  if(idStore.getInterviewId()===null){     //如果没有选择idStore，或者sessionStorage没有存储
+    message.warning('请先选择您要查看的面试!!')
+  }
+  else{
+    interviewId.value = (idStore.getInterviewId() as string)
+  }
+  getInterviewComment(storage.token,interviewId.value).then(res=>{
+    console.log(res);
+    if(res.data.code===200){
+      console.log('成功接收到数据');
+      
+    }
+    else{
+      console.log('没有接收到成功数据');
+      
+    }
+  }).catch(err=>{
+    console.log(err);
+    
+  })
+})
 </script>
 
 <template>

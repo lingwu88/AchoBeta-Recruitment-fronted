@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import navigationTop from '@/components/navigationTop.vue'
 import { useRouter } from 'vue-router'
 import { emailLogin,sendCaptcha } from '@/api/api'
-import { emailLoginType } from '@/utils/emailLoginType'
+import { emailLoginType } from '@/utils/type/emailLoginType'
 import { useStore } from '@/store/index'
 import { useMessage } from 'naive-ui'
 

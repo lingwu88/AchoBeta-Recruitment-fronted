@@ -1,15 +1,52 @@
 <script lang="ts" setup>
-import {PropTypes} from '@/utils/propTypes'
+import { ref ,onMounted } from 'vue'
 import titleBlock from '@/components/titleBlock.vue'
+import { useStore } from '@/store/index'
+import { useIdStore } from '@/store/idStore'
+import { useMessage } from 'naive-ui'
+import { getInterviewDetail } from '@/api/api'
+import { interviewArrangement } from '@/utils/type/interviewArrangementType.ts'
+import { splitTime } from '@/utils/splitTime'
+
 defineOptions({
   name:'interviewArrangement'
 })
 
-const prop=defineProps({
-  startTime:PropTypes.string.def('2022-12-12'),
-  endTime:PropTypes.string.def('1314--05-20'),
-  address:PropTypes.string.def('松山湖校区:9A206-3'),
-  description:PropTypes.string.def('进入面试请检查相关设备是否正常的撒合法空间的开了房间啊打开')
+const interviewId = ref<string>('')
+const storage = useStore()
+const idStore = useIdStore()
+const message = useMessage()
+const arrangement = ref<interviewArrangement>({
+  time:'',
+  address:'',
+  description:''
+})
+
+
+
+onMounted(()=>{
+  if(idStore.getInterviewId()===null){     //如果没有选择idStore，或者sessionStorage没有存储
+    message.warning('请先选择您要查看的面试!!')
+  }
+  else{
+    interviewId.value = (idStore.getInterviewId() as string)
+  }
+  getInterviewDetail(storage.token,interviewId.value).then(res=>{
+    console.log(res);
+    if(res.data.code===200){         //200,表明成功返回数据，其他则可能请求发送成功，但返回其余失败数据
+      let sTime = splitTime(res.data.data.scheduleVO.startTime)
+      let eTime = splitTime(res.data.data.scheduleVO.endTime)
+      arrangement.value.time = sTime + ' - ' + eTime
+      arrangement.value.address = res.data.data.address
+      arrangement.value.description = res.data.data.description
+    }
+    else{
+      message.warning(res.data.message)
+    }
+  }).catch(err=>{
+    console.log(err);
+    
+  })
 })
 </script>
 
@@ -19,15 +56,15 @@ const prop=defineProps({
         <n-flex vertical>
           <div class="arrangement-content">
             <p class="arrangement-title">面试时间:</p>
-            <p class="arrangement-description"><span>{{ prop.startTime }} — </span><span>{{ prop.endTime }}</span></p>
+            <p class="arrangement-description"><span>{{ arrangement.time }}</span></p>
           </div>
           <div class="arrangement-content">
             <p class="arrangement-title">面试地点:</p>
-            <p class="arrangement-description">{{ prop.address }}</p>
+            <p class="arrangement-description">{{ arrangement.address }}</p>
           </div>
           <div class="arrangement-content">
             <p class="arrangement-title">面试说明</p>
-            <p class="last-description">{{ prop.description }}</p>
+            <p class="last-description">{{ arrangement.description }}</p>
           </div>
         </n-flex>
     </div>

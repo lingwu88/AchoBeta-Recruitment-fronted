@@ -1,11 +1,90 @@
 <script lang="ts" setup>
 import titleBlock from '@/components/titleBlock.vue'
-import Number3 from '@vicons/carbon/Number3'
+import ShareArrivalTimeSharp from '@vicons/material/ShareArrivalTimeSharp'
 import { useRouter } from 'vue-router'
-const router = useRouter()
+import { ref , onMounted} from 'vue'
+import { interviewType } from '@/utils/type/interviewType.ts'
+import { useStore } from '@/store/index'
+import { useIdStore } from '@/store/idStore'
+import { getInterview } from '@/api/api'
+import { useMessage } from 'naive-ui'
 
-const toInterviewDetailed=()=>{
+const storage = useStore()
+const idStore = useIdStore()
+const router = useRouter()
+const batchId = ref<number>()
+const actId = ref<number>()
+const message = useMessage()
+const interviewList = ref<interviewType[]>([])
+
+const toInterviewDetailed=(id:number)=>{
+  idStore.setInterviewId(id.toString())
   router.push('/activitiesLayout/interviewDetailed')
+}
+
+onMounted(()=>{
+  if(idStore.getBatchId()!=null){
+    batchId.value = parseInt((idStore.getBatchId() as string))
+  }
+  else{
+    message.warning('请回到首页选择批次!')
+  } 
+
+  if(idStore.getActId()!=null){
+    actId.value = parseInt((idStore.getActId() as string))
+  }
+  else{
+    message.warning('请回到活动选择页面选择活动!')
+  }
+  //如果都有，则进行调用接口
+  getInterview(storage.token,
+  {
+    batchId:(batchId.value as number),
+    actId:(actId.value as number)
+  }).then(res=>{
+    console.log(res.data.data);
+    res.data.data.forEach((item:{
+      id:number,
+      status:number,
+      title:string,
+    }) => {
+      interviewList.value.push({
+        interviewId:item.id,
+        title:item.title,
+        status:item.status
+      })
+    });
+  }).catch(err=>{
+    console.log(err);
+  })
+})
+
+const switchStatus=(status:number)=>{
+  switch (status) {
+    case 0:
+      return '未开始'
+    case 1:
+      return '进行中'
+    case 2:
+      return '已结束'
+  }
+}
+
+const switchIcon=(status:number)=>{
+  switch(status){
+    case 0:
+      return {
+        'grayIcon':true
+      }
+    case 1:
+      return {
+        'yellowIcon':true
+      }
+    case 2:
+      return {
+        'greenIcon':true
+      }
+  }
 }
 </script>
 
@@ -15,34 +94,14 @@ const toInterviewDetailed=()=>{
     <n-collapse arrow-placement="right" class="interview-collapse">
       <n-collapse-item title="面试一览" name="1">
         <n-flex vertical class="flex-layout">
-          <div>
+          <div v-for="item in interviewList">
             <n-flex class="interview-flex-layout" justify="space-between">
-              <p class="interview-content-left">面试1</p>
+              <p class="interview-content-left">{{ item.title }}</p>
               <n-flex vertical :wrap=false class="interview-content-right">
-                <p>已结束</p>
-                <Number3 />
+                <ShareArrivalTimeSharp :class="switchIcon(item.status)" class="icon"/>
+                <p>{{ switchStatus(item.status) }}</p>
               </n-flex>
-              <n-button type="primary" class="interview-button" @click="toInterviewDetailed">查看</n-button>
-            </n-flex>
-          </div>
-          <div>
-            <n-flex class="interview-flex-layout" justify="space-between">
-              <p class="interview-content-left">面试2</p>
-              <n-flex vertical :wrap=false class="interview-content-right">
-                <p>未开始</p>
-                <Number3 />
-              </n-flex>
-              <n-button type="primary" class="interview-button" @click="toInterviewDetailed">查看</n-button>
-            </n-flex>
-          </div>
-          <div>
-            <n-flex class="interview-flex-layout" justify="space-between">
-              <p class="interview-content-left">面试3</p>
-              <n-flex  vertical :wrap=false class="interview-content-right">
-                <p>进行中</p>
-                <Number3 />
-              </n-flex>
-              <n-button type="primary" class="interview-button" @click="toInterviewDetailed">查看</n-button>
+              <n-button type="primary" class="interview-button" @click="toInterviewDetailed((item.interviewId as number))">查看</n-button>
             </n-flex>
           </div>
         </n-flex>
@@ -88,9 +147,22 @@ const toInterviewDetailed=()=>{
   gap:0 0!important;
 }
 .interview-content-left{
-  font-size:1.2rem;
+  width:50%;
+  font-size:1.1rem;
   padding:2vh 0 0 0;
   flex-grow: 1;
+}
+.icon{
+  transform: rotate(180deg);
+}
+.grayIcon{
+  color: gray;
+}
+.yellowIcon{
+  color: #d4d64f;
+}
+.greenIcon{
+  color:rgb(18, 189, 69);
 }
 .interview-button{
   margin: 2vh 0 0 0;

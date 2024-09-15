@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {formType} from '@/utils/formType'
+import {formType} from '@/utils/type/formType'
 import type { UploadFileInfo } from 'naive-ui'
 // import { PropTypes } from '@/utils/propTypes'
 import { ref , onMounted } from 'vue'
@@ -10,14 +10,16 @@ import Add12Filled from '@vicons/fluent/Add12Filled'
 import { submitResume } from '@/api/api'
 import { queryResume } from '@/api/api'
 import { useStore } from '@/store/index'
-import { useIdStore } from '@/store/idStore'
 // import type { UploadCustomRequestOptions } from 'naive-ui'
 import { useMessage } from 'naive-ui'
+import { deCode } from '@/utils/URIProtect'
+import { useIdStore } from '@/store/idStore'
 
-const idStore=useIdStore()
+const idStore = useIdStore()
 const storage=useStore()
 const message=useMessage()
 const title = ref<string>('')
+const batchId = ref<string>('')
 const router=useRouter()
 const params = useRoute().query
 
@@ -28,6 +30,8 @@ function isValidStudentId(studentId:string) {
   }
 }
 function isValidGrade(grade:number) {
+  console.log(grade);
+  
   const inputRegex = /^\d{4}$/
   if(inputRegex.test(grade.toString())){
     return !inputRegex.test(grade.toString())        //如果是数字，则返回false，不会进入判定
@@ -94,6 +98,9 @@ const submit=()=>{
     return
   }
   if(form.value.stuSimpleResumeDTO.grade==null || isValidGrade(form.value.stuSimpleResumeDTO.grade)){     //年级
+    console.log(isValidGrade(form.value.stuSimpleResumeDTO.grade as number));
+    console.log(form.value.stuSimpleResumeDTO.grade);
+    
     message.error('年级有误!')
     return
   }
@@ -141,15 +148,21 @@ const submit=()=>{
   })
 }
 const toActivities=()=>{
-  router.push({path:'/glanceActivities',query:{batchId:params.batchId}})
+  router.push({path:'/glanceActivities'})
 }
 
 onMounted(()=>{
-  form.value.stuSimpleResumeDTO.batchId=parseInt(idStore.getBatchId())      //将上个页面选择的id，送到当前页面作为不可更改批次使用
-  console.log(form.value.stuSimpleResumeDTO.batchId);
   
-  title.value = (params.title as string)
-  queryResume((params.batchId as string ),storage.token).then(res=>{
+  message.success('请先填写简历')
+  if(idStore.getBatchId()!=null)     //如果地址栏不为空
+    batchId.value = (idStore.getBatchId() as string)
+  else
+    message.error('请先选择你的招新批次!!!')
+  
+  form.value.stuSimpleResumeDTO.batchId=parseInt(batchId.value as string)     //将上个页面选择的id，送到当前页面作为不可更改批次使用
+  title.value = deCode(params.title as string)
+  
+  queryResume((batchId.value as string),storage.token).then(res=>{
     console.log(res);
     if(res.data.code===200){   //如果200，且有简历上传过
       form.value.stuSimpleResumeDTO.batchId=res.data.data.stuSimpleResumeVO.batchId
@@ -228,7 +241,7 @@ const beforeUpload=(data:{          //可以通过这个，获取上传文件信
         </n-radio-group>
       </n-form-item>
       <n-form-item  label="年级" class="label-width" required>
-          <n-input v-model.number:value="form.stuSimpleResumeDTO.grade" class="width" :input-props="{ type:'number' }"/>
+          <n-input v-model:value="form.stuSimpleResumeDTO.grade" class="width" :input-props="{ type:'number' }"/>
       </n-form-item>
       <n-form-item  label="专业" class="label-width" required>
           <n-input v-model:value="form.stuSimpleResumeDTO.major" class="width"/>
@@ -281,9 +294,8 @@ const beforeUpload=(data:{          //可以通过这个，获取上传文件信
       </n-form-item>
       <n-flex justify="space-around" class="flex-button">
         <n-button type="success" @click="submit">提交简历</n-button>
-        <n-button type="info" @click="submit">存为草稿</n-button>
+        <n-button type="warning" @click="toActivities">查看活动</n-button>
       </n-flex>
-      <n-button type="warning" class="last-button" @click="toActivities">查看批次活动</n-button>
     </n-form>
   </div>
 </template>
@@ -317,7 +329,7 @@ const beforeUpload=(data:{          //可以通过这个，获取上传文件信
 }
 .flex-button{
   width: 90vw;
-  padding:0 0 2vh 0;
+  padding:0 0 4vh 0;
   margin:0 6vw 0 auto;
 }
 .last-button{

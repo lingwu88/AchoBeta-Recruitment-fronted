@@ -32,11 +32,6 @@ const routes:Array<RouteRecordRaw> = [
     component:()=>import('@/views/resume.vue')
   },
   {
-    path:'/errPage',
-    name:'errPage',
-    component:()=>import('@/views/errPage.vue')
-  },
-  {
     path:'/activitiesLayout',
     name:'activitiesLayout',
     component:()=>import('@/views/activitiesLayout.vue'),
@@ -75,6 +70,11 @@ const routes:Array<RouteRecordRaw> = [
         } as MyRouteMeta
       }
     ]
+  },
+  {
+    path:'/errPage',
+    name:'errPage',
+    component:()=>import('@/views/errPage.vue')
   }
 ]
 

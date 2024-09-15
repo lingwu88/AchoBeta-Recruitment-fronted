@@ -2,15 +2,16 @@
 import Person32Filled from '@vicons/fluent/Person32Filled'
 import NewspaperSharp from '@vicons/ionicons5/NewspaperSharp'
 import Grunt from '@vicons/fa/Grunt'
-import {useRouter} from 'vue-router'
-import { ref } from 'vue'
+import { useRouter,useRoute } from 'vue-router'
+import { ref,onMounted } from 'vue'
 
 defineOptions({
   name:'navigationBottom'
 })
 
-const isCheck=ref(0)     //为真则悬浮——被选中，为假——不被选中
+const isCheck=ref(0)     //为真则悬浮——被选中，为假——不被选中，传入参数决定哪个图标亮起
 const router=useRouter()
+const route=useRoute()
 
 // const toResume=()=>{
 //   isCheck.value=!isCheck.value
@@ -24,15 +25,15 @@ const router=useRouter()
 
 const Block=[
   {
-    value:1,
+    value:0,
     label:'活动'
   },
   {
-    value:2,
+    value:1,
     label:'问卷'
   },
   {
-    value:3,
+    value:2,
     label:'面试'
   }
 ]
@@ -65,6 +66,28 @@ const toPage=(index:number)=>{
     case 2:router.push('/activitiesLayout/interview');break;
   }
 }
+
+onMounted(()=>{
+  const url = route.fullPath               //根据路由判断图标
+  if(url ==='/activitiesLayout/activity')
+    isCheck.value = 0
+  else if(url ==='/activitiesLayout/question')
+    isCheck.value = 1
+  else if(url === '/activitiesLayout/interview')
+    isCheck.value = 2
+})
+
+// router.beforeEach((to,from)=>{
+//   console.log(to);
+//   console.log(from);
+  
+//   if(to.fullPath ==='/activitiesLayout/activity')
+//     isCheck.value = 0
+//   else if(to.fullPath ==='/activitiesLayout/question')
+//     isCheck.value = 1
+//   else if(to.fullPath === '/activitiesLayout/interview')
+//     isCheck.value = 2
+// })
 </script>
 
 <template>
