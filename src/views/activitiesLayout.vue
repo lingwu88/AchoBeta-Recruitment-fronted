@@ -48,14 +48,9 @@ onMounted(()=>{
   top: 0;
 }
 .activitiesLayout{
-  overflow-x: hidden;
   width: 100vw;
   min-height: 100vh;
-  background-color: #A1C4FD;
-}
-.animation{
-  width: 200%;
-  display: flex;
+  background-color: #f2f7ff;
 }
 
 .slide-right-enter-active,
@@ -87,6 +82,7 @@ onMounted(()=>{
   transform: translateX(100%);
 }
 .navigationBottom{
+  margin:4vh 0 0 0;
   position: sticky;
   bottom: 3vh;
   left: 5vw;

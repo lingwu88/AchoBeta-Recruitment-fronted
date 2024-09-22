@@ -1,9 +1,14 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref , onMounted , onBeforeUnmount} from 'vue'
+import { PropTypes } from '@/utils/type/propTypes'
 import { useRouter } from 'vue-router'
 
 defineOptions({
   name:'navigationTop'
+})
+
+const props = defineProps({
+  pageHeight:PropTypes.number.def(642)
 })
 
 const router=useRouter()
@@ -33,6 +38,22 @@ const toAnother=((path:number)=>{
     case 4:router.push('/login');break;
   }
 })
+
+const watchHeight=()=>{
+  // document.body.style.height = `${pageHeight.value}px`           //使文档恢复初试页面高度
+    // (document.getElementById("app") as HTMLElement).style.height = pageHeight.value + "px";
+    const vh = props.pageHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+onMounted(()=>{
+  window.addEventListener('resize',watchHeight)
+})
+
+onBeforeUnmount(()=>{
+  window.removeEventListener('resize',watchHeight)
+})
+
 </script>
 
 <template>
@@ -40,20 +61,21 @@ const toAnother=((path:number)=>{
     <n-flex 
       class="flex-layout"
       justify="space-between"
+      :wrap="false"
     >
-    <div class="avatar-left">
-      <n-avatar
-      src="../src/assets/achoBeta.png"
-      />
-      <p>AchoBeta</p>
-    </div>
-      <n-avatar
-      round
-      src="../src/assets/avatar.jpg"
+      <div class="avatar-left">
+        <img
+        src="/src/assets/achoBeta.png"
+        class="avatar-logo"
+        />
+        <p>AchoBeta</p>
+      </div>
+      <img
+      src="/src/assets/avatar.jpg"
       class="avatar-right"
       @click="openDropDown"
       />
-      </n-flex>
+    </n-flex>
       <div class="dropDown" ref="dropDom">
         <p class="dropDown-content" @click="toAnother(1)">关于我们</p>
         <p class="dropDown-content" @click="toAnother(2)">我的面试</p>
@@ -65,52 +87,61 @@ const toAnother=((path:number)=>{
 
 <style scoped>
 .navigationTop{
-  height: 7vh;
+  height:  calc(var(--vh,1vh)*7);
   width: 100vw;
-  background-color: rgb(243, 243, 243);
+  background-color: rgb(251, 249, 249);
 }
 .flex-layout{
   width: 100%;
+  height: calc(var(--vh,1vh)*7);
 }
 .avatar-left{
-  width: auto;
+  width: 60vw;
   margin: 0 0 0 5vw;
-  height: 7vh;
+  height:  calc(var(--vh,1vh)*7);
   display:flex;
   flex-wrap: nowrap;
+  flex-grow: 1;
   /* flex-direction: column; */
+
+}
+.avatar-logo{
+  margin: calc(var(--vh,1vh)*0.5) 0 auto 0;
+  height:  calc(var(--vh,1vh)*6);
 }
 .avatar-left p{
-  padding:0 0 0 2vw;
+  padding:calc(var(--vh,1vh)*0.5) 0 0 2vw;
   background: url('/src/assets/text_background.jpg') no-repeat;
   background-size: cover;
   background-clip: text;
   color:transparent;
-  font-size:1.5rem;
+  font-size:1.9rem;
   font-family:'微软雅黑';
   font-style:italic;
   font-weight:bolder;
 }
 .avatar-right{
-  margin:0.5vh 10vw 0 0;
-  height: 6vh;
+  margin: calc(var(--vh,1vh)*0.5) 10vw 0 0;
+  height:  calc(var(--vh,1vh)*6);
   width: auto;
-  background-color: inherit
+  background-color: inherit;
+  border-radius:50%;
 }
 .dropDown-content{
   width: 100vw;
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(255, 253, 253);
   font-size: 1.1rem;
   font-weight: normal;
   text-align: center;
   letter-spacing: 0.7rem;
-  border-bottom: 1px solid rgb(187, 185, 185);
-  box-shadow: 0 2px 10px rgb(215, 192, 192);
+  padding: calc(var(--vh,1vh)*1) 0;
+  border-bottom: 1px solid rgb(231, 231, 231);
   font-family: '宋体';
-  animation:dropdown-animation 0.3s forwards
+  animation:dropdown-animation 0.3s forwards;
+  box-sizing: content-box;
 }
 .dropDown{
-  height: 0px;
+  height: 0;
   overflow: hidden;
   transition:height 0.5s;
 }

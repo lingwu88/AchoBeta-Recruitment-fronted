@@ -68,13 +68,13 @@ const routes:Array<RouteRecordRaw> = [
         meta:{
           index:4
         } as MyRouteMeta
+      },
+      {
+        path:'/process',
+        name:'process',
+        component:()=>import('@/views/process.vue')
       }
     ]
-  },
-  {
-    path:'/errPage',
-    name:'errPage',
-    component:()=>import('@/views/errPage.vue')
   }
 ]
 

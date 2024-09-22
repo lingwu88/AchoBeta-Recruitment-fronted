@@ -14,7 +14,8 @@ export interface formType{
     experience:string|null, //经历
     image:string|null,  //证件照
     awards:string|null, //获奖经历
-    remark:string|null //备注
+    remark:string|null, //备注
+    stateCount:number|null
   },
   stuAttachmentDTOList:[
     {

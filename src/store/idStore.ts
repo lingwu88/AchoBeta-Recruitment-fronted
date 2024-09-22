@@ -1,7 +1,4 @@
-import Interview from '@/views/interview.vue'
 import {defineStore} from 'pinia'
-import { ref } from 'vue'
-import { func } from 'vue-types'
 
 export const useIdStore =defineStore(
   'id',

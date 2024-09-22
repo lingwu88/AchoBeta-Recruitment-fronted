@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import navigationTop from '@/components/navigationTop.vue'
 import activitiesCard from '@/components/activitiesCard.vue'
+import errPage from '@/components/errPage.vue'
 import { ref,onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from '@/store/index'
@@ -15,12 +16,14 @@ type activitycard = {
   cardDescription:cardType
 }
 
+const is = ref<boolean>()
 const message=useMessage()
 const storage = useStore()
 const idStore = useIdStore()
 const router = useRouter()
 const batchId = ref<string>('')
 
+// const errCard = ref<>
 
 const activityCard=ref<activitycard[]>([
   {
@@ -48,6 +51,7 @@ onMounted(()=>{
   getActivitiesList(batchId.value,token).then(res=>{
     console.log(res);                 //如果面试年级
     if(res.data.code==200 && res.data.data.length!=0){       //如果成功，则注入进招新批次卡片的对象
+      is.value = false                  //如果此时有数据，且返回是200
       activityCard.value.shift()       //删除数组的默认初始值
       res.data.data.forEach((item:Activity) => {
         activityCard.value.push({
@@ -60,6 +64,9 @@ onMounted(()=>{
         })
       });
     }
+    else{
+      is.value = true
+    }
   }).catch(err=>{
     console.log(err);
     
@@ -70,21 +77,30 @@ onMounted(()=>{
 </script>
 
 <template>
-  <navigationTop></navigationTop>
+  <navigationTop class="top"></navigationTop>
   <n-flex vertical class="flex-layout">
-    <activitiesCard  v-for="item in activityCard" @toAnother="toResume(item.id.toString())" :cardMain="item.cardDescription" class="glance-card"></activitiesCard>
+    <activitiesCard v-if=!is  v-for="item in activityCard" @toAnother="toResume(item.id.toString())" :cardMain="item.cardDescription" class="glance-card"></activitiesCard>
+    <errPage v-if="is" class="err" status="warning" title="活动" description="暂时没有活动"></errPage>
   </n-flex>
 </template>
 
 <style scoped>
+.top{
+  z-index: 999;
+  position: sticky;
+  top: 0;
+}
 .flex-layout{
   min-height: 90vh;
   width: 100vw;
-  background-color: rgba(255, 226, 226, 0.612);
+  background-color: rgba(252, 252, 252, 0.288);
   padding:0 0 4vh 0;
 }
 .glance-card{
-  margin: 2vh 0 0 5vw;
+  width:90vw;
+  margin: 3vh 5vw 0 5vw;
+}
+.err{
+  margin:20vh 0 0 0;
 }
 </style>
-@/utils/type/activity

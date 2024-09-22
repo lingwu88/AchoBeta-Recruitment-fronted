@@ -5,7 +5,9 @@
 
 <template>
   <n-message-provider placement="top" :max='3'>
-    <routerView></routerView>
+  <n-dialog-provider>
+      <routerView></routerView>
+  </n-dialog-provider>
   </n-message-provider>
 </template>
 

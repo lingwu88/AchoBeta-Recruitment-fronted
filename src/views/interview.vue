@@ -123,7 +123,7 @@ const switchIcon=(status:number)=>{
   background-color: white;
   border-radius: 10px;
   border: 0;
-  box-shadow: 0 0 10px rgb(137, 148, 173) ;
+  box-shadow: 0 0 10px rgb(185, 193, 214)  ;
   font-family: '楷体';
   padding: 0;
 }

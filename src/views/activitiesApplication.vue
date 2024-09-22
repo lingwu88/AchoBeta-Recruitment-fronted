@@ -15,7 +15,6 @@ const message = useMessage()
 const storage = useStore()
 const idStore = useIdStore()
 const actId = ref<string>('')
-const isRunDescription = ref<string>('暂无活动')
 // const params = useRoute().query
 const activities = ref<Activity>({
   id:null,
@@ -70,14 +69,10 @@ onMounted(()=>{
             <p class="activities-description time"><span>{{ activities.createTime }} — </span><span>{{ activities.deadline }}</span></p>
         </div>
         <div class="activities-content">
-            <p class="activities-title">活动状态:{{ isRunDescription }}</p>
-        </div>
-        <div class="activities-content">
             <p class="activities-title">活动详情:</p>
             <p class="last-activities-description detailed" >{{ activities.description }}</p>
         </div>
       </div>
-
     </div>
 </template>
 
@@ -113,7 +108,7 @@ onMounted(()=>{
   min-height: 20vh;
   background-color: white;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgb(137, 148, 173) ;
+  box-shadow: 0 0 10px rgb(185, 193, 214) ;
   margin: 0 auto 0 5vw;
 }
 .activities-content{

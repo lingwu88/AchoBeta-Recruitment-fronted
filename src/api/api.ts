@@ -9,7 +9,7 @@ export const emailLogin =(data:emailLoginType)=>{
 
 export const sendCaptcha =(email:string)=>{
   return request({
-    url:'/api/v1/resource/email/code',
+    url:'/api/v1/email/code',
     method:'post',
     params:{email}
   })
@@ -132,3 +132,33 @@ export const getInterviewComment = ((isvaildToken:string,interviewId:string)=>{
   }
  }) 
 })
+
+export const getStatusList = (isVaildToken:string)=>{
+  return request({
+    url:'/api/v1/resumestate/list/status',
+    method:'get',
+    headers:{
+      token:isVaildToken
+    }
+  })  
+}
+
+export const getEventList = (isVaildToken:string)=>{
+  return request({
+    url:'/api/v1/resumestate/list/event',
+    method:'get',
+    headers:{
+      token:isVaildToken
+    }
+  })
+}
+
+export const getResumeStatus = (isVaildToken:string,batchId:string)=>{
+  return request({
+    url:`/api/v1/resumestate/process/user/${batchId}`,
+    method:'get',
+    headers:{
+      token:isVaildToken
+    }
+  })
+}

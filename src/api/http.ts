@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { useStore } from '@/store/index'
 
-const storage = useStore()
 
 const request = axios.create({
   baseURL:'/',
@@ -27,8 +26,10 @@ request.interceptors.request.use(
 //响应拦截器（对请求结束后进行一些操作，，例如:统一收集报错）
 request.interceptors.response.use(
   res => {
+    const storage = useStore()
     if(res.headers.hasOwnProperty('token') && res.headers.token!=null){                 //对即将失效（失效前20o分钟内的token，进行无感刷新，而对于已失效的token，则一定是要跳转到登录页面）
       storage.setToken(res.headers.token)                                               //重新覆盖为新的token
+      console.log('你好，要无感刷新啊');
     }
     return Promise.resolve(res)
   },      //将promise变为操作成功状态，并将res传递作为then方法的参数

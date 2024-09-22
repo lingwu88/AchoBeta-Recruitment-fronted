@@ -7,11 +7,14 @@ import { useStore } from '@/store/index'
 import { useIdStore } from '@/store/idStore'
 import { useMessage } from 'naive-ui'
 import { getInterviewComment } from '@/api/api'
+import nullPage from '@/components/nullPage.vue'
 
 defineOptions({
   name:'interviewResult'
 })
 
+const is =ref()
+const isDescription = ref<string>()
 const interviewId = ref<string>('')
 const storage = useStore()
 const idStore = useIdStore()
@@ -41,11 +44,20 @@ onMounted(()=>{
     console.log(res);
     if(res.data.code===200){
       console.log('成功接收到数据');
-      
+      comments.value.id = res.data.data.id
+      comments.value.interviewId = res.data.data.interviewId
+      comments.value.basis = res.data.data.basis
+      comments.value.coding = res.data.data.coding
+      comments.value.thinking = res.data.data.thinking
+      comments.value.express = res.data.data.express
+      comments.value.evalute = res.data.data.evaluate
+      comments.value.suggest = res.data.data.suggest
+      comments.value.playback = res.data.data.playback
+      is.value = true
     }
     else{
-      console.log('没有接收到成功数据');
-      
+      is.value = false
+      isDescription.value = res.data.message
     }
   }).catch(err=>{
     console.log(err);
@@ -57,10 +69,11 @@ onMounted(()=>{
 <template>
   <div class="interviwe-result">
     <titleBlock title="面试评价" class="title"></titleBlock>
-    <n-collapse arrow-placement="right" class="interview-collapse">
+    <n-collapse arrow-placement="right" class="interview-collapse"  :default-expanded-names="['1']">
       <n-collapse-item title="面评总结" name="1">
           <div>
-            <n-flex vertical>
+            <nullPage v-if=!is :desctiption="isDescription" class="null-comments"></nullPage>
+            <n-flex vertical v-if="is">
               <div>
                 <p class="comment-title">基础能力</p>
                 <n-rate class="comment-icon" color=#dfdsas readonly :value="comments.basis">
@@ -128,7 +141,7 @@ onMounted(()=>{
   background-color: white;
   border-radius: 10px;
   border: 0;
-  box-shadow: 0 0 10px rgb(137, 148, 173) ;
+  box-shadow: 0 0 10px rgb(185, 193, 214) ;
   font-family: '楷体';
   padding: 0;
 }
@@ -153,5 +166,12 @@ onMounted(()=>{
 }
 .last-comment{
   padding: 0 0 2vh 0;
+}
+.null-comments{
+  text-align: center;
+  width: 100%;
+  height: 10vh;
+  font-size: 1.6rem;
+  font-family: '宋体'
 }
 </style>

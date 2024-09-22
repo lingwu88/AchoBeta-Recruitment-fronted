@@ -48,7 +48,7 @@ const toAnother=()=>{
   width: 90vw;
   margin: 0 5vw 0 auto;
   font-family: "宋体";
-  border-radius: 10px;
+  border-radius: 5%;
   box-shadow:  2px 9px 20px #d5d5d5;
   margin-bottom: 10px;
 }

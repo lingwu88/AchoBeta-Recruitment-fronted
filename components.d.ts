@@ -7,13 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    ActivitiesCard: typeof import('./src/components/activitiesCard.vue')['default']
-    InterviewArrangement: typeof import('./src/components/interviewArrangement.vue')['default']
-    InterviewResult: typeof import('./src/components/interviewResult.vue')['default']
-    Introduce: typeof import('./src/components/Introduce.vue')['default']
     NAvatar: typeof import('naive-ui')['NAvatar']
-    NavigationBottom: typeof import('./src/components/navigationBottom.vue')['default']
-    NavigationTop: typeof import('./src/components/navigationTop.vue')['default']
     NBackTop: typeof import('naive-ui')['NBackTop']
     NButton: typeof import('naive-ui')['NButton']
     NCard: typeof import('naive-ui')['NCard']
@@ -21,6 +15,7 @@ declare module 'vue' {
     NCarouselItem: typeof import('naive-ui')['NCarouselItem']
     NCollapse: typeof import('naive-ui')['NCollapse']
     NCollapseItem: typeof import('naive-ui')['NCollapseItem']
+    NDialogProvider: typeof import('naive-ui')['NDialogProvider']
     NFlex: typeof import('naive-ui')['NFlex']
     NForm: typeof import('naive-ui')['NForm']
     NFormItem: typeof import('naive-ui')['NFormItem']
@@ -30,15 +25,16 @@ declare module 'vue' {
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
     NRadio: typeof import('naive-ui')['NRadio']
     NRadioGroup: typeof import('naive-ui')['NRadioGroup']
+    NRate: typeof import('naive-ui')['NRate']
+    NResult: typeof import('naive-ui')['NResult']
+    NSelect: typeof import('naive-ui')['NSelect']
     NSpace: typeof import('naive-ui')['NSpace']
     NText: typeof import('naive-ui')['NText']
     NTimeline: typeof import('naive-ui')['NTimeline']
     NTimelineItem: typeof import('naive-ui')['NTimelineItem']
     NUpload: typeof import('naive-ui')['NUpload']
     NUploadDragger: typeof import('naive-ui')['NUploadDragger']
-    ProcessIntroduce: typeof import('./src/components/processIntroduce.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    TitleBlock: typeof import('./src/components/titleBlock.vue')['default']
   }
 }

@@ -80,7 +80,7 @@ onMounted(()=>{
   min-height: 20vh;
   background-color: white;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgb(137, 148, 173) ;
+  box-shadow: 0 0 10px rgb(185, 193, 214) ;
   margin: 0 auto 0 5vw;
 }
 .arrangement-content{

@@ -2,7 +2,7 @@
 import {formType} from '@/utils/type/formType'
 import type { UploadFileInfo } from 'naive-ui'
 // import { PropTypes } from '@/utils/propTypes'
-import { ref , onMounted } from 'vue'
+import { ref , onMounted , watch , onBeforeUnmount} from 'vue'
 import { useRouter , useRoute } from 'vue-router'
 import titleBlock from '@/components/titleBlock.vue'
 import navigationTop from '@/components/navigationTop.vue'
@@ -11,15 +11,18 @@ import { submitResume } from '@/api/api'
 import { queryResume } from '@/api/api'
 import { useStore } from '@/store/index'
 // import type { UploadCustomRequestOptions } from 'naive-ui'
-import { useMessage } from 'naive-ui'
+import { useMessage,useDialog } from 'naive-ui'
 import { deCode } from '@/utils/URIProtect'
 import { useIdStore } from '@/store/idStore'
 
+const pageHeight=ref(document.documentElement.scrollHeight)
 const idStore = useIdStore()
 const storage=useStore()
 const message=useMessage()
+const dialog=useDialog()
 const title = ref<string>('')
 const batchId = ref<string>('')
+const count = ref<number>(3)
 const router=useRouter()
 const params = useRoute().query
 
@@ -75,7 +78,8 @@ const form=ref<formType>({
     experience:null, //经历
     image:"https://tse3-mm.cn.bing.net/th/id/OIP-C.fE-acoWUqqkKPSuQfR8NQwHaHW?w=179&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",  //证件照
     awards:null, //获奖经历
-    remark:null //备注
+    remark:null, //备注,
+    stateCount:999      //剩余可提交次数
   },
   stuAttachmentDTOList:[{
     filename:'', //文件名
@@ -142,18 +146,29 @@ const submit=()=>{
   }
   submitResume(storage.token,form.value).then(res=>{
     console.log(res);
+    if(res.data.code===200){
+      message.success('提交成功')
+      if(count.value)
+        count.value--;
+    }
+    else{
+      message.warning(res.data.message)
+    }
   }).catch(err=>{
     console.log(err);
     
   })
 }
-const toActivities=()=>{
-  router.push({path:'/glanceActivities'})
+
+// const toActivities=()=>{
+//   router.push({path:'/glanceActivities'})
+// }
+
+const toProcess=()=>{
+  router.push({path:'/process'})
 }
 
 onMounted(()=>{
-  
-  message.success('请先填写简历')
   if(idStore.getBatchId()!=null)     //如果地址栏不为空
     batchId.value = (idStore.getBatchId() as string)
   else
@@ -164,6 +179,7 @@ onMounted(()=>{
   
   queryResume((batchId.value as string),storage.token).then(res=>{
     console.log(res);
+    
     if(res.data.code===200){   //如果200，且有简历上传过
       form.value.stuSimpleResumeDTO.batchId=res.data.data.stuSimpleResumeVO.batchId
       form.value.stuSimpleResumeDTO.studentId=res.data.data.stuSimpleResumeVO.studentId
@@ -180,11 +196,35 @@ onMounted(()=>{
       form.value.stuSimpleResumeDTO.image=res.data.data.stuSimpleResumeVO.image
       form.value.stuSimpleResumeDTO.awards=res.data.data.stuSimpleResumeVO.awards
       form.value.stuSimpleResumeDTO.remark=res.data.data.stuSimpleResumeVO.remark
+      form.value.stuSimpleResumeDTO.stateCount=res.data.data.stuSimpleResumeVO.submitCount
+
+      dialog.success({
+        title: '您已填写简历',
+        content: '是否直接查看该批次活下的活动?',
+        positiveText: '是',
+        negativeText: '否',
+        onPositiveClick: () => {
+          // toActivities()
+        },
+        onNegativeClick: () => {
+        }
+      })
+    }
+    else{       //没填写过简历时
+      message.warning('请先填写简历')
     }
   }).catch(err=>{
     console.log(err);
     
   })
+  window.addEventListener('resize',watchHeight)
+})
+
+watch(()=>form.value.stuSimpleResumeDTO.stateCount,(New,old)=>{
+  console.log(old);
+  if(New!=null)
+     count.value = 3-New
+  
 })
 
 const beforeUpload=(data:{          //可以通过这个，获取上传文件信息
@@ -192,15 +232,24 @@ const beforeUpload=(data:{          //可以通过这个，获取上传文件信
 })=>{
   console.log(data.file);
 }
+
+const watchHeight=()=>{
+  // document.body.style.height = `${pageHeight.value}px`           //使文档恢复初试页面高度
+    // (document.getElementById("app") as HTMLElement).style.height = pageHeight.value + "px";
+    const vh = pageHeight.value * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+onBeforeUnmount(()=>{
+  window.removeEventListener('resize',watchHeight)
+})
 </script>
 
 <template>
   <div class="resume-layout">
-    <navigationTop class="top"></navigationTop>
+    <navigationTop class="top" :pageHeight="pageHeight"></navigationTop>
     <n-h1 class="header-description">
-      <n-text type="primary">
         {{ title }}
-      </n-text>
     </n-h1>
     <n-form
       :model="form"
@@ -225,9 +274,6 @@ const beforeUpload=(data:{          //可以通过这个，获取上传文件信
       <n-form-item  label="姓名" class="label-width" required >
           <n-input v-model:value="form.stuSimpleResumeDTO.name" class="width"/>
       </n-form-item>
-      <n-form-item  label="招新批次" class="label-width" required readonly>
-        <n-input v-model:value="form.stuSimpleResumeDTO.batchId" class="width" disabled/>
-      </n-form-item>
       <n-form-item  label="学号" class="label-width" required>
           <n-input v-model:value="form.stuSimpleResumeDTO.studentId" class="width" />
       </n-form-item>
@@ -241,7 +287,7 @@ const beforeUpload=(data:{          //可以通过这个，获取上传文件信
         </n-radio-group>
       </n-form-item>
       <n-form-item  label="年级" class="label-width" required>
-          <n-input v-model:value="form.stuSimpleResumeDTO.grade" class="width" :input-props="{ type:'number' }"/>
+          <n-input v-model:value="form.stuSimpleResumeDTO.grade" class="width" :input-props="{ type:'number' }" placeholder="请以20xx格式填写"/>
       </n-form-item>
       <n-form-item  label="专业" class="label-width" required>
           <n-input v-model:value="form.stuSimpleResumeDTO.major" class="width"/>
@@ -256,7 +302,7 @@ const beforeUpload=(data:{          //可以通过这个，获取上传文件信
           <n-input v-model:value="form.stuSimpleResumeDTO.phoneNumber" class="width"/>
       </n-form-item>
       <n-form-item  label="简介" class="label-width" required>
-          <n-input v-model:value="form.stuSimpleResumeDTO.introduce" class="width"/>
+          <n-input v-model:value="form.stuSimpleResumeDTO.introduce" type="textarea" class="width"/>
       </n-form-item>
       <n-form-item  label="经历" class="label-width" required>
           <n-input v-model:value="form.stuSimpleResumeDTO.experience" type="textarea" class="width" />
@@ -294,8 +340,10 @@ const beforeUpload=(data:{          //可以通过这个，获取上传文件信
       </n-form-item>
       <n-flex justify="space-around" class="flex-button">
         <n-button type="success" @click="submit">提交简历</n-button>
-        <n-button type="warning" @click="toActivities">查看活动</n-button>
+        <!-- <n-button @click="toActivities">跳转活动</n-button> -->
+        <n-button type="warning" @click="toProcess">简历进度</n-button>
       </n-flex>
+      <p class="last-p">目前还剩下<span class="important-span">{{count}}</span>次可提交简历</p>
     </n-form>
   </div>
 </template>
@@ -303,8 +351,9 @@ const beforeUpload=(data:{          //可以通过这个，获取上传文件信
 <style scoped>
 .resume-layout{
   width:100vw;
-  min-height:auto;
-  background-color: #71cde9;
+  min-height:calc(var(--vh,1vh)*50);
+  background-color: #ffffff;
+  box-sizing: content-box;
 }
 .top{
   z-index: 999;
@@ -312,31 +361,45 @@ const beforeUpload=(data:{          //可以通过这个，获取上传文件信
   top: 0;
 }
 .header-description{
-  margin: 2vh 0 0 2vw;
+  margin: calc(var(--vh,1vh)*1) 0 0 2vw;
+  font-size: 1.7rem;
 }
 .label-width{
-  margin: 0 0 0 3vw;
+  margin: 0 5vw 0 5vw;
+  width: 90vw;
   height: auto!important;;
 }
 .width{
-  width: 94vw;
-  border-radius: 5px;
+  width: 85vw;
+  min-height: calc(var(--vh,1vh)*7);
+  line-height: calc(var(--vh,1vh)*7);
+  vertical-align: middle;
+  border-radius: 3%;
+  background-color: #f3f4f6;
 }
 .space{
   background-color: rgba(255, 255, 255, 0.756);
-  height: 1vh;
+  height: calc(var(--vh,1vh)*1);
   margin: 0 0 2vh 0;
 }
 .flex-button{
   width: 90vw;
-  padding:0 0 4vh 0;
+  padding:0 0 calc(var(--vh,1vh)*1) 0;
   margin:0 6vw 0 auto;
 }
 .last-button{
   width: 40vw;
-  margin:1vh 0 2vh 27vw;
+  margin:calc(var(--vh,1vh)*1) 0 calc(var(--vh,1vh)*2) 27vw;
+}
+.last-p{
+  text-align: center;
+  padding:calc(var(--vh,1vh)*1) 0 calc(var(--vh,1vh)*2) 0;
+}
+.important-span{
+  font-weight: bolder;
+  color: rgb(227, 60, 60)
 }
 .title{
-  margin: 3vh 0 0 4vw;
+  margin: calc(var(--vh,1vh)*3) 0 0 4vw;
 }
 </style>

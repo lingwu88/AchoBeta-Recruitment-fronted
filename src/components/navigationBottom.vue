@@ -73,7 +73,7 @@ onMounted(()=>{
     isCheck.value = 0
   else if(url ==='/activitiesLayout/question')
     isCheck.value = 1
-  else if(url === '/activitiesLayout/interview')
+  else if(url === '/activitiesLayout/interview'|| url === '/activitiesLayout/interviewDetailed')
     isCheck.value = 2
 })
 
@@ -143,7 +143,7 @@ onMounted(()=>{
   width: 10vmin;
   height: 10vmin;
   border-radius: 50%;
-  background-color: rgb(146, 219, 123);
+  background-color: rgb(104, 132, 194)
 }
 .icon-layout{
   width:10vmin;

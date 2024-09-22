@@ -39,39 +39,39 @@ const batchCard=ref<BatchCardType[]>([
 const carouselPhoto =[
   {
     class:'carousel-img',
-    src:"src/assets/photo1.jpg",
+    src:"/photo1.jpg",
     alt:'暂时无法接收图片'
   },
   {
     class:'carousel-img',
-    src:"src/assets/photo2.jpg",
+    src:"/photo2.jpg",
     alt:'暂时无法接收图片'
   },
   {
     class:'carousel-img',
-    src:"src/assets/photo3.jpg",
+    src:"/photo3.jpg",
     alt:'暂时无法接收图片'
   },
   {
     class:'carousel-img',
-    src:"src/assets/photo4.jpg",
+    src:"/photo4.jpg",
     alt:'暂时无法接收图片'
   }
 ]
 const teamPhoto= [
   {
     class:'carousel-img',
-    src:"src/assets/photo1.jpg",
+    src:"/photo1.jpg",
     alt:'暂时无法接收图片'
   },
   {
     class:'carousel-img',
-    src:"src/assets/photo2.jpg",
+    src:"/photo2.jpg",
     alt:'暂时无法接收图片'
   },
   {
     class:'carousel-img',
-    src:"src/assets/photo3.jpg",
+    src:"/photo3.jpg",
     alt:'暂时无法接收图片'
   },
 ]
@@ -85,22 +85,23 @@ const toApplication=(id:string,tit:string)=>{
 }
 
 onMounted(()=>{
+  console.log(import.meta.url)
   scroollTo()
-  let state='暂无批次'
+  // let state='暂无批次'
   getBatch(storage.token).then(res=>{
     console.log(res);
     if(res.data.code==200){       //如果成功，则注入进招新批次卡片的对象
       batchCard.value.shift()       //删除数组的默认初始值
       res.data.data.forEach((item:batchType) => {
-        if (item.isRun===true)
-          state='已开启'
-        else
-          state='未开启'
+        // if (item.isRun===true)
+        //   state='已开启'
+        // else
+        //   state='未开启'
         batchCard.value.push({
           id:(item.id as number).toString(),
           cardDescription:{
-            title:item.title+`(${state})`,
-            content:'招新批次'+item.id,
+            title:item.title,
+            content:'招新届数'+item.batch,
             footer:'截至时间:'+item.deadline
           }
         })
