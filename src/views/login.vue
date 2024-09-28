@@ -35,6 +35,8 @@ const timer=ref(60)
 
 function isValidEmail(email:string) {
   const emailRegex = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+  console.log(emailRegex.test(email));
+  
   return emailRegex.test(email)
 }
 
@@ -52,14 +54,6 @@ const sendCode=()=>{
           message.success('成功发送验证码！')
           countDown()
           isDisabled.value=true
-          }
-          else if(res.data.code==1005){
-            message.error('邮箱格式不是符合规范格式');
-          }
-          else if(res.data.code==2500)
-          {
-            message.error('输入验证码错误')
-            message.warning(res.data.message)
           }
           else{
             message.warning(res.data.message)
@@ -98,19 +92,19 @@ const resetTimer=()=>{
 }
 
 const login=()=>{
-  if(emailForm.value.email_params.email==null && emailForm.value.email_params.email===''){
-    message.error('请填写邮箱')
-  }
-  if(emailForm.value.email_params.emailCode==null || emailForm.value.email_params.emailCode===''){
-    message.error('请输入验证码')
-  }
   emailLogin(emailForm.value).then(res=>{
     if(res.data.code===200){
       router.push('/')
       storage.setToken(res.data.data.access_token)        //Client存储Token
     }
-    else
+    else if(res.data.code==2500)
+    {
+      message.error('输入验证码错误')
       message.warning(res.data.message)
+    }
+    else{
+      message.warning(res.data.message)
+    }
   }).catch(err=>{
     console.log(err);
     message.error(err.message)
@@ -153,10 +147,12 @@ onBeforeUnmount(()=>{
         <n-button type="primary" @click="login" class="button">登录</n-button>
         <!-- <p class="tip">暂时只有网易、QQ的邮箱能使用哦😥</p> -->
         </n-flex>
+
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+
 .top{
   z-index: 999;
   position: sticky;
@@ -264,4 +260,8 @@ onBeforeUnmount(()=>{
   color:gray;
   pointer-events: none;
 }
+
+/*测试用 */
+
+
 </style>

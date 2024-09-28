@@ -115,7 +115,7 @@ const switchIcon=(status:number)=>{
   min-height:80vh;
 }
 .interviewMine{
-  padding:2vh 0 0 3vw
+  margin:3vh 0 3vh 4vw;
 }
 .interview-collapse{
   width: 90vw;

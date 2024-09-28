@@ -209,7 +209,7 @@ onBeforeUnmount(()=>{
 
 <style scoped>
 .title{
-  margin: calc(var(--vh,1vh)*2) 0 0 4vw;
+  margin: calc(var(--vh,1vh)*3) 0 calc(var(--vh,1vh)*4) 4vw;
   font-size: 1.5rem;
 }
 .header-description{

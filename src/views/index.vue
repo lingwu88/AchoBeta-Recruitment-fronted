@@ -39,39 +39,39 @@ const batchCard=ref<BatchCardType[]>([
 const carouselPhoto =[
   {
     class:'carousel-img',
-    src:"/photo1.jpg",
+    src:"/picture1.jpg",
     alt:'暂时无法接收图片'
   },
   {
     class:'carousel-img',
-    src:"/photo2.jpg",
+    src:"/picture2.jpg",
     alt:'暂时无法接收图片'
   },
   {
     class:'carousel-img',
-    src:"/photo3.jpg",
+    src:"/picture3.jpg",
     alt:'暂时无法接收图片'
   },
   {
     class:'carousel-img',
-    src:"/photo4.jpg",
+    src:"/picture4.jpg",
     alt:'暂时无法接收图片'
   }
 ]
 const teamPhoto= [
   {
     class:'carousel-img',
-    src:"/photo1.jpg",
+    src:"/image2.png",
     alt:'暂时无法接收图片'
   },
   {
     class:'carousel-img',
-    src:"/photo2.jpg",
+    src:"/image4.png",
     alt:'暂时无法接收图片'
   },
   {
     class:'carousel-img',
-    src:"/photo3.jpg",
+    src:"/image3.png",
     alt:'暂时无法接收图片'
   },
 ]
@@ -160,7 +160,7 @@ onMounted(()=>{
         <template #title>
           <div  class="card-title">
             <p class="english-title">Team Introduction</p>
-            <p class="chinese-title"><b>团队介绍</b></p>
+            <p class="chinese-title"><b>团队产品</b></p>
           </div>
         </template>
         <template #content>
@@ -186,6 +186,10 @@ onMounted(()=>{
 </template>
 
 <style scoped>
+@font-face {
+  font-family: JetBrains-ExtraBoldItalic;
+  src: url('@/assets/ttf/JetBrainsMono-ExtraBoldItalic.ttf');
+}
 .top{
   z-index: 999;
   position: sticky;
@@ -195,7 +199,7 @@ onMounted(()=>{
   z-index: 999;
 }
 .english-title{
-  font-family: '华文隶书';
+  font-family: JetBrains-ExtraBoldItalic;
   font-size: 1.4rem;
   padding-left: 3%;
 }
@@ -214,8 +218,8 @@ onMounted(()=>{
   height: 400px;
 }
 .carousel-img {
-  width: 100%;
-  height: 100%;
+  width:100%;
+  height:100%;
   object-fit: cover;
 }
 .card-title{

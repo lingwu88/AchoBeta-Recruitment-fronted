@@ -1,8 +1,4 @@
 <script lang="ts" setup>
-// import ArrowAutofitUp20Filled from '@vicons/fluent/ArrowAutofitUp20Filled'
-// import Number1 from '@vicons/carbon/Number1'
-// import Number2 from '@vicons/carbon/Number2'
-// import Number3 from '@vicons/carbon/Number3'
 import Bulb from '@vicons/tabler/Bulb'
 import { ref,onMounted } from 'vue'
 import { statusList, eventList, resumeProcess } from '@/utils/type/processType.ts' 
@@ -10,12 +6,12 @@ import { getStatusList, getEventList, getResumeStatus } from '@/api/api'
 import { useStore } from '@/store/index'
 import { useIdStore } from '@/store/idStore.ts'
 import { useMessage } from 'naive-ui'
-// defineOptions({
-//   name:'processIntroduce'
-// })
+import navigationTop from '@/components/navigationTop.vue'
+
 const statuslist = ref<statusList[]>([])              //对应码号，说明简历的状态（待筛之类？其实我认为两者概念似乎倒转了）
 const eventlist = ref<eventList[]>([])                //对应码号，说明简历所处事件状态
 const resumeprocess = ref<resumeProcess[]>([])
+const eventColor = ['green','green','red','gray','yellow','yellow','green']    //为事件状态创建对应颜色表，每个下标的事件代表的不同的颜色（目前有4大类颜色）
 const storage = useStore()
 const idStore = useIdStore()
 const message = useMessage()
@@ -79,11 +75,15 @@ onMounted(async()=>{
 })
 
 const swtichStatus = (id:number)=>{
-  return 'green'
+  // return eventColor[id]
+  return {
+    [eventColor[id]]:true
+  }
 }
 </script>
 
 <template>
+  <navigationTop class="top"></navigationTop>
   <div class="process-layout">
       <n-card  
       content-style="padding:0 0 0 2vw;"
@@ -92,71 +92,35 @@ const swtichStatus = (id:number)=>{
         <n-timeline :icon-size="30">
         <n-timeline-item 
           v-for="item in resumeprocess"
-          :color="swtichStatus((item.resumeEvent as number))"
-          :title="statuslist[(item.resumeStatus as number)].message"
+          :title="statuslist[(item.resumeStatus as number)].message + ' ( ' + eventlist[(item.resumeEvent as number -1)].description + ' ) '"
           :time="item.createTime"
           line-type="dashed"
           class="icon"
         >
           <template #icon>
             <n-icon >
-              <Bulb />
+              <Bulb  :class='[swtichStatus((item.resumeEvent as number -1))]'/>
             </n-icon>
           </template>
         </n-timeline-item>
-
-        <!-- <n-timeline-item
-          line-type="dashed"
-          type="success"
-          title="初试"
-          time="2018-04-03 20:46"
-          class="icon"
-        >
-          <template #icon>
-            <n-icon>
-              <Number1 />
-            </n-icon>
-          </template>
-        </n-timeline-item>
-        <n-timeline-item 
-        type="success" 
-        title="复试"
-        time="2018-04-03 20:46"
-        line-type="dashed"
-        color="blue"
-        class="icon"
-        >
-          <template #icon>
-            <n-icon>
-              <Number2 />
-            </n-icon>
-          </template>
-        </n-timeline-item>
-        <n-timeline-item
-          type="warning"
-          title="终试"
-          time="2018-04-03 20:46"
-          class="icon"
-        >
-          <template #icon>
-            <n-icon>
-              <Number3 />
-            </n-icon>
-          </template>
-        </n-timeline-item> -->
       </n-timeline>
     </n-card>
   </div>
 </template>
 
 <style scoped>
+.top{
+  z-index: 999;
+  position: sticky;
+  top: 0;
+}
 .process-layout{
-  padding:2vh 0 0 0;
+  padding:2vh 0 2vh 0;
   min-height:80vh;
   box-sizing: border-box;
 }
 .box{
-  width: 90vw;
+  width: 80vw;
   border-width: none;
   border-color: white;
   box-shadow:0 0 20px #b5b2b2;
@@ -166,5 +130,17 @@ const swtichStatus = (id:number)=>{
 }
 .icon{
   margin: 0 0 0 2vw;
+}
+.green{
+  color:green;
+}
+.red{
+  color: red;
+}
+.gray{
+  color: #b5b2b2;
+}
+.yellow{
+  color: #f5cd4a;
 }
 </style>

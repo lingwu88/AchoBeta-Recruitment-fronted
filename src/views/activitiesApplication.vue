@@ -78,7 +78,7 @@ onMounted(()=>{
 
 <style scoped>
 .acApplication-layout{
-  min-height: 80vh;
+  min-height: 75vh;
   padding: 6vh 0 0 0;
   box-sizing: border-box;
 }
@@ -88,8 +88,7 @@ onMounted(()=>{
   background-color: inherit
 }
 .title{
-  margin: 0 0 0 4vw;
-  padding: 2vh 0 0 0;
+  margin: 0 0 4vh 4vw;
   font-size: 1.2rem;
 }
 .time{

@@ -162,3 +162,54 @@ export const getResumeStatus = (isVaildToken:string,batchId:string)=>{
     }
   })
 }
+
+export const resourcePreview = (code:number)=>{
+  return request({
+    url:`/api/v1/resource/preview/${code}`,
+    method:'get',
+    responseType: 'arraybuffer'
+  })
+}
+
+export const uploadFile = (isVaildToken:string,data:File)=>{
+  return request({
+    url:'/api/v1/resource/upload/one',
+    method:'post',
+    data:data,
+    headers:{
+      token:isVaildToken
+    }
+  })
+}
+
+export const uploadFileList = (isVaildToken:string,data:any)=>{
+  return request({
+    url:'/api/v1/resource/upload/list',
+    method:'post',
+    data:data,
+    headers:{
+      token:isVaildToken
+    }
+  })
+}
+
+export const uploadPicture = (isVaildToken:string,data:any) =>{
+  return request({
+    url:'/api/v1/resource/upload/image',
+    method:'post',
+    data:data,
+    headers:{
+      token:isVaildToken
+    }
+  })
+}
+
+export const deleteResource = (isVaildToken:string,code:number) =>{
+  return request({
+    url:`/api/v1/resource/remove/${code}`,
+    method:'get',
+    headers:{
+      token:isVaildToken
+    }
+  })
+}

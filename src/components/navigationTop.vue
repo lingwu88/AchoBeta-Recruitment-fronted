@@ -2,11 +2,13 @@
 import { ref , onMounted , onBeforeUnmount} from 'vue'
 import { PropTypes } from '@/utils/type/propTypes'
 import { useRouter } from 'vue-router'
+import { useMessage } from 'naive-ui'
 
 defineOptions({
   name:'navigationTop'
 })
 
+const message = useMessage()
 const props = defineProps({
   pageHeight:PropTypes.number.def(642)
 })
@@ -33,8 +35,8 @@ const openDropDown=()=>{
 const toAnother=((path:number)=>{
   switch (path) {
     case 1:router.push('/');break;
-    case 2:router.push('/');break;
-    case 3:router.push('/person');break;
+    case 2:message.warning('暂未完成，敬请期待~');break;
+    case 3:message.warning('暂未完成，敬请期待~');break;
     case 4:router.push('/login');break;
   }
 })
@@ -110,7 +112,8 @@ onBeforeUnmount(()=>{
   height:  calc(var(--vh,1vh)*6);
 }
 .avatar-left p{
-  padding:calc(var(--vh,1vh)*0.5) 0 0 2vw;
+  height: calc(var(--vh,1vh)*5vh);
+  padding:calc(var(--vh,1vh)*0.2) 0 calc(var(--vh,1vh)*1.5) 2vw;
   background: url('/src/assets/text_background.jpg') no-repeat;
   background-size: cover;
   background-clip: text;

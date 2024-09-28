@@ -3,6 +3,11 @@ import ArrowAutofitUp20Filled from '@vicons/fluent/ArrowAutofitUp20Filled'
 import Number1 from '@vicons/carbon/Number1'
 import Number2 from '@vicons/carbon/Number2'
 import Number3 from '@vicons/carbon/Number3'
+import Number4 from '@vicons/carbon/Number4'
+import Number5 from '@vicons/carbon/Number5'
+import Number6 from '@vicons/carbon/Number6'
+import Number7 from '@vicons/carbon/Number7'
+import Number8 from '@vicons/carbon/Number8'
 defineOptions({
   name:'processIntroduce'
 })
@@ -16,7 +21,7 @@ defineOptions({
       <n-timeline :icon-size="30">
       <n-timeline-item 
         color="green"
-        title="投递简历"
+        title="点击对应批次"
         time="2018-04-03 20:46"
         line-type="dashed"
         class="icon"
@@ -29,10 +34,10 @@ defineOptions({
       </n-timeline-item>
       <n-timeline-item
         line-type="dashed"
-        type="success"
-        title="初试"
+        title="填写简历(可查看招新进度)"
         time="2018-04-03 20:46"
         class="icon"
+        color="#d777d5"
       >
         <template #icon>
           <n-icon>
@@ -41,8 +46,7 @@ defineOptions({
         </template>
       </n-timeline-item>
       <n-timeline-item 
-      type="success" 
-      title="复试"
+      title="等待招新活动"
       time="2018-04-03 20:46"
       line-type="dashed"
       color="blue"
@@ -55,14 +59,79 @@ defineOptions({
         </template>
       </n-timeline-item>
       <n-timeline-item
-        type="warning"
-        title="终试"
+        title="查看招新活动信息"
         time="2018-04-03 20:46"
         class="icon"
+        color=#ff7514
       >
         <template #icon>
           <n-icon>
             <Number3 />
+          </n-icon>
+        </template>
+      </n-timeline-item>
+      <n-timeline-item
+        type="warning"
+        title="填写招新活动问卷"
+        time="2018-04-03 20:46"
+        class="icon"
+        color=#dd6565
+      >
+        <template #icon>
+          <n-icon>
+            <Number4 />
+          </n-icon>
+        </template>
+      </n-timeline-item>
+      <n-timeline-item
+        type="warning"
+        title="等待面试安排"
+        time="2018-04-03 20:46"
+        class="icon"
+        color="#2a9735"
+      >
+        <template #icon>
+          <n-icon>
+            <Number5 />
+          </n-icon>
+        </template>
+      </n-timeline-item>
+      <n-timeline-item
+        type="warning"
+        title="查看面试地点"
+        time="2018-04-03 20:46"
+        class="icon"
+        color=""
+      >
+        <template #icon>
+          <n-icon>
+            <Number6 />
+          </n-icon>
+        </template>
+      </n-timeline-item>
+      <n-timeline-item
+        type="warning"
+        title="完成面试,查看面试总结"
+        time="2018-04-03 20:46"
+        class="icon"
+        color="#bb290f"
+      >
+        <template #icon>
+          <n-icon>
+            <Number7 />
+          </n-icon>
+        </template>
+      </n-timeline-item>
+      <n-timeline-item
+        type="warning"
+        title="等待面试结果通知"
+        time="2018-04-03 20:46"
+        class="icon"
+        color="#8800ff"
+      >
+        <template #icon>
+          <n-icon>
+            <Number8 />
           </n-icon>
         </template>
       </n-timeline-item>

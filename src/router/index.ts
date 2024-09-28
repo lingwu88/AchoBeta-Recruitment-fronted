@@ -8,6 +8,10 @@ interface MyRouteMeta extends RouteMeta{
 const routes:Array<RouteRecordRaw> = [
   {
     path:"/",
+    redirect:'/index'
+  },
+  {
+    path:"/index",
     name:"Index",
     component:()=>import("@/views/index.vue")
   },
@@ -30,6 +34,11 @@ const routes:Array<RouteRecordRaw> = [
     path:'/resume',
     name:'resume',
     component:()=>import('@/views/resume.vue')
+  },
+  {
+    path:'/process',
+    name:'process',
+    component:()=>import('@/views/process.vue')
   },
   {
     path:'/activitiesLayout',
@@ -68,11 +77,6 @@ const routes:Array<RouteRecordRaw> = [
         meta:{
           index:4
         } as MyRouteMeta
-      },
-      {
-        path:'/process',
-        name:'process',
-        component:()=>import('@/views/process.vue')
       }
     ]
   }

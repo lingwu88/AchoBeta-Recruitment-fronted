@@ -1,3 +1,8 @@
+export interface attachmentList{
+  filename:string, //文件名
+  attachment:number //附件列表资源码
+}
+
 export interface formType{
   stuSimpleResumeDTO:{
     batchId: number|null,    //招新批次
@@ -12,15 +17,10 @@ export interface formType{
     reason:string|null, //加入AB的理由
     introduce:string|null, //简介
     experience:string|null, //经历
-    image:string|null,  //证件照
+    image:number|null,  //资源码
     awards:string|null, //获奖经历
     remark:string|null, //备注
     stateCount:number|null
   },
-  stuAttachmentDTOList:[
-    {
-    filename:string|null, //文件名
-    attachment:string|null //附件列表
-    }
-  ]
+  stuAttachmentDTOList:attachmentList[]
 }

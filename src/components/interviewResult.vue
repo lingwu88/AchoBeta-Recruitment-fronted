@@ -127,7 +127,7 @@ onMounted(()=>{
 
 <style scoped>
 .title{
-  margin: 2vh 0 0 4vw;
+  margin: 3vh 0 3vh 4vw;
   font-size: 1.5rem;
 }
 .video{

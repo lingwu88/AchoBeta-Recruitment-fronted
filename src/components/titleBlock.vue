@@ -11,14 +11,18 @@ const prop=defineProps({
 <template>
   <div>
     <p class="title-p">{{ prop.title }}</p>
-    <div class="title-border"></div>
+    <!-- <div class="title-border"></div> -->
   </div>
 </template>
 
 <style scoped>
 .title-p{
+  height: 4vh;
+  border-left: 1vw solid green;
+  line-height: 4vh;
   font-size: 1.1rem;
   margin: 0;
+  padding: 0 0 0 1vw;
 }
 .title-border{
   height: 1rem;
