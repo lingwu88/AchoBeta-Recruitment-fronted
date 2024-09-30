@@ -18,7 +18,7 @@ const prop=defineProps({
 <style scoped>
 .title-p{
   height: 4vh;
-  border-left: 1vw solid green;
+  border-left: 1vw solid rgb(89, 68, 193);
   line-height: 4vh;
   font-size: 1.1rem;
   margin: 0;

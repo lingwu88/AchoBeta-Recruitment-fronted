@@ -163,11 +163,14 @@ export const getResumeStatus = (isVaildToken:string,batchId:string)=>{
   })
 }
 
-export const resourcePreview = (code:number)=>{
+export const resourcePreview = (isVaildToken:string,code:number)=>{
   return request({
     url:`/api/v1/resource/preview/${code}`,
     method:'get',
-    responseType: 'arraybuffer'
+    responseType: 'arraybuffer',
+    headers:{
+      token:isVaildToken
+    }
   })
 }
 

@@ -5,12 +5,14 @@ import { useRouter } from 'vue-router'
 import { emailLogin,sendCaptcha } from '@/api/api'
 import { emailLoginType } from '@/utils/type/emailLoginType'
 import { useStore } from '@/store/index'
+import { useIdStore } from '@/store/idStore'
 import { useMessage } from 'naive-ui'
 
 const message=useMessage()
 const pageHeight=ref(document.documentElement.scrollHeight)
 const router = useRouter()
 const storage=useStore()
+const idStore=useIdStore()
 const emailForm=ref<emailLoginType>({
   login_type:'email',
   email_params:{
@@ -94,8 +96,9 @@ const resetTimer=()=>{
 const login=()=>{
   emailLogin(emailForm.value).then(res=>{
     if(res.data.code===200){
-      router.push('/')
       storage.setToken(res.data.data.access_token)        //Client存储Token
+      idStore.setEmail((emailForm.value.email_params.email as string))
+      router.push('/')
     }
     else if(res.data.code==2500)
     {

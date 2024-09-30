@@ -115,16 +115,17 @@ const swtichStatus = (id:number)=>{
   top: 0;
 }
 .process-layout{
+  width:100vw;
   padding:2vh 0 2vh 0;
   min-height:80vh;
   box-sizing: border-box;
 }
 .box{
-  width: 80vw;
+  width: 90vw;
+  margin: 0 5vw 0 auto;
   border-width: none;
   border-color: white;
   box-shadow:0 0 20px #b5b2b2;
-  margin:0 5vw 0 auto;
   padding: 4vh 0 4vh 0;
   border-radius: 20px;
 }

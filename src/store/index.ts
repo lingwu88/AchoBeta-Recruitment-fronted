@@ -15,6 +15,8 @@ export const useStore =defineStore(
       localStorage.removeItem('store')
     }
 
+    
+
     return{
       token,
       setToken,

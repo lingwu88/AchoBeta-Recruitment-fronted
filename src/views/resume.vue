@@ -90,6 +90,7 @@ const form=ref<formType>({
   stuAttachmentDTOList:[]
 })
 
+//删除附件列表中不需要的资源
 const judgDelete = async function(){
     //先判断是否有删除曾经的
     //以对照附件表中的资源码为样本，对比fileListCode这个即将上传的附件资源码列表，查看即将上传的表中是否能找到对照表的码，不行则为删除
@@ -99,12 +100,12 @@ const judgDelete = async function(){
       
       if(!hasValue){                               //hasValue为true，说明有该值，即没被删掉;为false，则说明fileListCode里面没有item的值，已经在用户可视处删除了
         console.log('没错,这个资源已经被删掉了');
-        await deleteResource(storage.token,item.attachment).then(async res=>{
+        await deleteResource(storage.token,item.attachment).then( res=>{
           console.log(res);
           if(res.data.code === 200){                              //还要删附件列表
             console.log('成功删除');                              //找被删去的资源码在表单数据中的下表
-
-            const index = await (async (code: number) => {
+            message.success('成功删除某个文件')
+            const index =  ((code: number) => {
             for (let i = 0; i < form.value.stuAttachmentDTOList.length; i++) {
               if (form.value.stuAttachmentDTOList[i].attachment === code) {
                 console.log('找到应该被删除的附件下标'+i);
@@ -117,16 +118,109 @@ const judgDelete = async function(){
             return -1;  // 没找到返回 -1
           })(item.attachment);
           console.log(index);
-            
           }
           else{
             message.warning(res.data.message)
             showModal.value = false
+            console.log('动画关闭');
+            
           }
           
         })
       }
     };
+}
+
+
+  //上传图片资源函数
+const uploadP = async function(){
+    //如何判断是否重复上传 —— 不用判断是否重复上传了？直接覆盖？？
+    await uploadPicture(storage.token,pictureData).then(res=>{
+      console.log(res);
+      if(res.data.code === 200){
+        form.value.stuSimpleResumeDTO.image = res.data.data           //赋值
+        console.log('第一次上传资源成功');
+        
+      }
+      else{
+        message.warning(res.data.message)
+        showModal.value = false
+        console.log('动画关闭');
+      }
+    }).catch(err=>{
+      console.log(err);                  //出错就退出！
+      showModal.value = false
+      console.log('动画关闭');
+    })
+} 
+
+//删除图片资源
+const deleteP = async function(code:number){
+   await deleteResource(storage.token,code).then(res=>{
+      if(res.data.code === 200){
+        console.log('删除老资源成功');
+      }
+      else{
+        message.warning(res.data.message)
+        showModal.value = false
+        console.log('动画关闭');
+      }
+    }).catch(err=>{
+      console.log(err);
+      showModal.value = false
+      console.log('动画关闭');
+    })
+}
+
+//上传新增附件资源
+const uploadNewList = async function(){
+  message.warning('进到上传资源函数咯')
+  if(fileArr.length!=0){          //如果有新附件列表  （如何避免重复上传）
+  //开始资源上传,先是附件列表
+    console.log('有新增附件');
+  
+    await uploadFileList(storage.token,fileListData).then(res=>{
+      if(res.data.code === 200){
+        form.value.stuAttachmentDTOList = []                //将表单数据重置，之后操作统一赋值
+        message.success('返回资源码数组'+res.data.data.length)
+        //赋值构造 ，将新的附件列表资源码返回到对象数组
+        for(let i=0 ; i<res.data.data.length;i++){
+          fileListCode.push({
+            filename:fileArr[i].name,
+            attachment:res.data.data[i]
+          })
+          console.log(res.data.data[i]);
+          
+        }
+      //给简历附件列表数组推进新值
+        fileListCode.forEach(item=>{
+          form.value.stuAttachmentDTOList.push({
+            filename:item.filename,
+            attachment:item.attachment
+          })
+        })
+        console.log(form.value.stuAttachmentDTOList);
+        console.log(fileListCode);
+        message.success('成功上传某个附件')
+      }
+      else{
+        message.warning(res.data.message)
+        message.warning('上传失败')
+        showModal.value = false
+        console.log('动画关闭');
+      }
+
+    }).catch(err=>{
+      console.log(err);
+      showModal.value = false
+      console.log('动画关闭');
+      message.warning('上传失败')
+      message.warning(err.message)
+    })
+  }
+  else{
+    message.error('资源数组为空')
+  }
 }
 
 const submit= async ()=>{
@@ -196,95 +290,154 @@ const submit= async ()=>{
   else if(form.value.stuSimpleResumeDTO.image === null && picture != null){      //没有上传过照片，第一次上传证件照
     console.log('第一次上传证件照');
 
-    //如何判断是否重复上传 —— 不用判断是否重复上传了？直接覆盖？？
-    await uploadPicture(storage.token,pictureData).then(res=>{
+    //先上传图片，再判断是否需要删除附件资源
+    uploadP().then(()=>judgDelete()).then(()=>uploadNewList()).then(()=>submitResume(storage.token,form.value)).then(res=>{
       console.log(res);
-      if(res.data.code === 200){
-        form.value.stuSimpleResumeDTO.image = res.data.data           //赋值
-        console.log('第一次上传资源成功');
-        
+      if(res.data.code===200){
+        message.success('提交成功')
+        if(count.value)
+          count.value--;
+          showModal.value = false
       }
       else{
         message.warning(res.data.message)
         showModal.value = false
+        console.log('动画关闭');
       }
     }).catch(err=>{
-      console.log(err);                  //出错就退出！
+      console.log(err);
       showModal.value = false
+      console.log('动画关闭');
     })
+
+    // //如何判断是否重复上传 —— 不用判断是否重复上传了？直接覆盖？？
+    // await uploadPicture(storage.token,pictureData).then(res=>{
+    //   console.log(res);
+    //   if(res.data.code === 200){
+    //     form.value.stuSimpleResumeDTO.image = res.data.data           //赋值
+    //     console.log('第一次上传资源成功');
+        
+    //   }
+    //   else{
+    //     message.warning(res.data.message)
+    //     showModal.value = false
+    //   }
+    // }).catch(err=>{
+    //   console.log(err);                  //出错就退出！
+    //   showModal.value = false
+    // })
   }
   else if(form.value.stuSimpleResumeDTO.image != null && picture != null){
     console.log('有新资源上传,删除老资源');
-    await deleteResource(storage.token,form.value.stuSimpleResumeDTO.image).then(res=>{
-      if(res.data.code === 200){
-        console.log('删除老资源成功');
+        //先上传图片，再判断是否需要删除附件资源
+    deleteP(form.value.stuSimpleResumeDTO.image).then(()=>uploadP()).then(()=>judgDelete()).then(()=>uploadNewList()).then(()=>submitResume(storage.token,form.value)).then(res=>{
+      console.log(res);
+      if(res.data.code===200){
+        message.success('提交成功')
+        if(count.value)
+          count.value--;
+          showModal.value = false
       }
       else{
         message.warning(res.data.message)
         showModal.value = false
+        console.log('动画关闭');
       }
     }).catch(err=>{
       console.log(err);
       showModal.value = false
+      console.log('动画关闭');
     })
+    // await deleteResource(storage.token,form.value.stuSimpleResumeDTO.image).then(res=>{
+    //   if(res.data.code === 200){
+    //     console.log('删除老资源成功');
+    //   }
+    //   else{
+    //     message.warning(res.data.message)
+    //     showModal.value = false
+    //   }
+    // }).catch(err=>{
+    //   console.log(err);
+    //   showModal.value = false
+    // })
 
-    //上传新的证件照
-    await uploadPicture(storage.token,pictureData).then(res=>{
+    // //上传新的证件照
+    // await uploadPicture(storage.token,pictureData).then(res=>{
+    //   console.log(res);
+    //   if(res.data.code === 200){
+    //     form.value.stuSimpleResumeDTO.image = res.data.data           //赋值
+    //     console.log('新证件照上传成功');
+    //   }
+    //   else{
+    //     message.warning(res.data.message)
+    //     showModal.value = false
+    //   }
+    // }).catch(err=>{
+    //   console.log(err);                  //出错就退出！
+    //   showModal.value = false
+    // })
+  }
+  else if(form.value.stuSimpleResumeDTO.image != null && picture === null){
+    judgDelete().then(()=>uploadNewList()).then(()=>submitResume(storage.token,form.value)).then(res=>{
       console.log(res);
-      if(res.data.code === 200){
-        form.value.stuSimpleResumeDTO.image = res.data.data           //赋值
-        console.log('新证件照上传成功');
+      if(res.data.code===200){
+        message.success('提交成功')
+        if(count.value)
+          count.value--;
+          showModal.value = false
       }
       else{
         message.warning(res.data.message)
         showModal.value = false
+        console.log('动画关闭');
       }
     }).catch(err=>{
-      console.log(err);                  //出错就退出！
+      console.log(err);
       showModal.value = false
+      console.log('动画关闭');
     })
   }
   
 
-  if(fileArr.length!=0){          //如果有新附件列表  （如何避免重复上传）
-  //开始资源上传,先是附件列表
-    console.log('有新增附件');
+  // if(fileArr.length!=0){          //如果有新附件列表  （如何避免重复上传）
+  // //开始资源上传,先是附件列表
+  //   console.log('有新增附件');
   
-    await uploadFileList(storage.token,fileListData).then(res=>{
-      if(res.data.code === 200){
-        form.value.stuAttachmentDTOList = []                //将表单数据重置，之后操作统一赋值
-        //赋值构造 ，将新的附件列表资源码返回到对象数组
-        for(let i=0 ; i<res.data.data.length;i++){
-          fileListCode.push({
-            filename:fileArr[i].name,
-            attachment:res.data.data[i]
-          })
-          console.log(res.data.data[i]);
+  //   await uploadFileList(storage.token,fileListData).then(res=>{
+  //     if(res.data.code === 200){
+  //       form.value.stuAttachmentDTOList = []                //将表单数据重置，之后操作统一赋值
+  //       //赋值构造 ，将新的附件列表资源码返回到对象数组
+  //       for(let i=0 ; i<res.data.data.length;i++){
+  //         fileListCode.push({
+  //           filename:fileArr[i].name,
+  //           attachment:res.data.data[i]
+  //         })
+  //         console.log(res.data.data[i]);
           
-        }
+  //       }
 
-        console.log(fileListCode);
-      }
-      else{
-        message.warning(res.data.message)
-        showModal.value = false
-      }
+  //       console.log(fileListCode);
+  //     }
+  //     else{
+  //       message.warning(res.data.message)
+  //       showModal.value = false
+  //     }
 
       
-      //给简历附件列表数组推进新值
-      fileListCode.forEach(item=>{
-        form.value.stuAttachmentDTOList.push({
-          filename:item.filename,
-          attachment:item.attachment
-        })
-      })
-      console.log(form.value.stuAttachmentDTOList);
+  //     //给简历附件列表数组推进新值
+  //     fileListCode.forEach(item=>{
+  //       form.value.stuAttachmentDTOList.push({
+  //         filename:item.filename,
+  //         attachment:item.attachment
+  //       })
+  //     })
+  //     console.log(form.value.stuAttachmentDTOList);
 
-    }).catch(err=>{
-      console.log(err);
-      showModal.value = false
-    })
-  }
+  //   }).catch(err=>{
+  //     console.log(err);
+  //     showModal.value = false
+  //   })
+  // }
 
   // const upload = document.getElementById('upload');
   // console.log(upload.files);                         //upload可以接收到上传的图片，但是不清楚上传后又删除会怎样
@@ -293,27 +446,26 @@ const submit= async ()=>{
 
 
 
-  judgDelete().then(()=>{
-    submitResume(storage.token,form.value).then(res=>{
-      console.log(res);
-      if(res.data.code===200){
-        message.success('提交成功')
-        if(count.value)
-          count.value--;
-      }
-      else{
-        message.warning(res.data.message)
-        showModal.value = false
-      }
-    }).catch(err=>{
-      console.log(err);
-      showModal.value = false
-    })
-  }).catch(err=>{
-    console.log(err);
-    showModal.value = false
-  })
-  showModal.value = false
+  // judgDelete().then(()=>{
+  //   // submitResume(storage.token,form.value).then(res=>{
+  //   //   console.log(res);
+  //   //   if(res.data.code===200){
+  //   //     message.success('提交成功')
+  //   //     if(count.value)
+  //   //       count.value--;
+  //   //   }
+  //   //   else{
+  //   //     message.warning(res.data.message)
+  //   //     showModal.value = false
+  //   //   }
+  //   // }).catch(err=>{
+  //   //   console.log(err);
+  //   //   showModal.value = false
+  //   // })
+  // }).catch(err=>{
+  //   console.log(err);
+  //   showModal.value = false
+  // })
 }
 
 const toActivities=()=>{
@@ -373,7 +525,7 @@ onMounted(()=>{
 
       //如果有图片资源码
       if(form.value.stuSimpleResumeDTO.image!=null){
-          resourcePreview((form.value.stuSimpleResumeDTO.image)).then(res=>{
+          resourcePreview(storage.token,form.value.stuSimpleResumeDTO.image).then(res=>{
           fileList.value = []
             //将二进制的utf8字符码转换为base64码去访问
           const src = `data: image/jpeg;base64,${btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))}`;
@@ -438,6 +590,9 @@ onMounted(()=>{
     }
     else{       //没填写过简历时
       message.warning('请先填写简历')
+      if((idStore.getEmail()) != null){      //如果有邮箱
+        form.value.stuSimpleResumeDTO.email = idStore.getEmail()
+      }
     }
   }).catch(err=>{
     console.log(err);
@@ -480,8 +635,12 @@ const delImage = ()=>{
   const imgContainer = document.getElementById('imgContainer');
   const img = document.getElementById('img');
   const icon = document.getElementById('icon');
+  const upload = document.getElementById('upload');
 
+  //删除图片
   (img as HTMLImageElement).src = '';
+  //删除input内容
+  (upload as HTMLInputElement).value = '';
   (imgContainer as HTMLElement).style.display = 'none';
   (icon as HTMLElement).style.display = 'inline-block';
 //删除设置的某个图片
@@ -511,15 +670,17 @@ const beforeUploadList = (data:{
   console.log(data.fileList);
   
   
-  fileArr = []
+  // fileArr = []
 
 
-  //区分新增的文件的文件与返回的文件 —— 是否有file属性
-  data.fileList.forEach(item=>{
-    if(item.file != null){                //只返回有file，不会将曾经上传过后返回来的文件当作新的文件使用
-      fileArr.push(item.file)
-    }
-  })
+  // //区分新增的文件的文件与返回的文件 —— 是否有file属性
+  // data.fileList.forEach(item=>{
+  //   if(item.file != null){                //只返回有file，不会将曾经上传过后返回来的文件当作新的文件使用
+  //     fileArr.push(item.file)
+  //     console.log('推进');
+      
+  //   }
+  // })
 
   //再添加新增文件
   fileArr.push((data.file.file as File))
@@ -543,25 +704,29 @@ const removeUploadList = async(data:{
 })=>{
   
   let newfile = []
-  newfile = await data.fileList.filter(async(item:UploadFileInfo)=>{
+  console.log(fileListCode);
+  newfile = data.fileList.filter((item:UploadFileInfo)=>{        //当附件列表只有一个附件的时候？？
     console.log(item);
     
     if(item.file===null && data.file.name == item.name){      //如果是要删除的元素，且为曾经上传过的文件
 
-    const index = await (async (code: number) => {
+    const index = ((code: number) => {
         for (let i = 0; i < fileListCode.length; i++) {
           if (fileListCode[i].attachment === code) {
+            fileListCode.splice(i,1)        //修改目前fileListCode的数组，删去附件列表中被删去的元素
             return i;  // 返回找到的索引
           }
         }
         return -1;  // 没找到返回 -1
       })(Number(item.id));
-      fileListCode.splice(index,1)        //修改目前fileListCode的数组，删去附件列表中被删去的元素
 
+      console.log(index);
+      
       return ((data.file as UploadFileInfo).name != item.name);
     }
-    
-    return ((data.file as UploadFileInfo).name != item.name);         //根据名字删除，得到一个根据名字区分的新数组
+    else{
+      return ((data.file as UploadFileInfo).name != item.name);         //根据名字删除，得到一个根据名字区分的新数组
+    }
   })
   //得到新的附件列表数组后
 
@@ -583,6 +748,7 @@ const removeUploadList = async(data:{
     fileListData.append('file',item)
   })
   console.log(fileListCode);
+  console.log(fileArr);
   
 }
 
@@ -612,7 +778,7 @@ onBeforeUnmount(()=>{
       label-width="10vw"
       id="form"
     >
-    <titleBlock title="个人信息" class="title"></titleBlock>
+    <titleBlock title="个人信息【必填】" class="title"></titleBlock>
       <n-form-item label="证件照" class="label-width" required>
         <!-- <n-upload
           list-type="image-card"
@@ -658,10 +824,10 @@ onBeforeUnmount(()=>{
           <n-input v-model:value="form.stuSimpleResumeDTO.grade" class="width" :input-props="{ type:'number' }" placeholder="20xx格式填写"/>
       </n-form-item>
       <n-form-item  label="专业 ( 乱填后果自负!! )" class="label-width" required>
-          <n-input v-model:value="form.stuSimpleResumeDTO.major" class="width"/>
+          <n-input v-model:value="form.stuSimpleResumeDTO.major" class="width" placeholder="请填写专业"/>
       </n-form-item>
       <n-form-item  label="班级 ( 乱填后果自负!! )" class="label-width" required>
-          <n-input v-model:value="form.stuSimpleResumeDTO.className" class="width"/>
+          <n-input v-model:value="form.stuSimpleResumeDTO.className" class="width" placeholder="请以班级+班号格式填写"/>
       </n-form-item>
       <n-form-item  label="邮箱" class="label-width" required>
           <n-input v-model:value="form.stuSimpleResumeDTO.email" class="width" placeholder="请填写常用邮箱"/>
@@ -681,14 +847,14 @@ onBeforeUnmount(()=>{
       <n-form-item  label="加入理由" class="label-width" required>
           <n-input v-model:value="form.stuSimpleResumeDTO.reason" type="textarea" class="width" placeholder="请填写加入理由"/>
       </n-form-item>
-      <n-form-item  label="备注" class="label-width" placeholder="可选填备注">
-          <n-input v-model:value="form.stuSimpleResumeDTO.remark" class="width"/>
+      <n-form-item  label="备注" class="label-width" >
+          <n-input v-model:value="form.stuSimpleResumeDTO.remark" class="width"  placeholder="可选填备注"/>
       </n-form-item>
       <div class="space"></div>
-      <titleBlock title="附件上传" class="title"></titleBlock>
+      <titleBlock title="附件上传【选填】" class="title"></titleBlock>
       <n-form-item label="附件" class="label-width" required>
         <n-upload
-          multiple
+          :multiple="true"
           directory-dnd
           :default-file-list="fileList"
           default-uoload="false"

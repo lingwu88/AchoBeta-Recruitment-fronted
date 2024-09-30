@@ -50,7 +50,7 @@ onMounted(()=>{
 .activitiesLayout{
   width: 100vw;
   min-height: 100vh;
-  background-color: #f2f7ff;
+  background-color: #eff7ff;
 }
 
 .slide-right-enter-active,

@@ -25,6 +25,18 @@ export const useIdStore =defineStore(
       return id===batchId       //是的话，则返回true,不是则返回false
     }
 
+    function setEmail(em:string){
+      sessionStorage.setItem('email',em)
+    }
+
+    function clearEmail(){
+      sessionStorage.removeItem('email')
+    }
+
+    function getEmail(){
+      return sessionStorage.getItem('email')
+    }
+
     function setActId(id:string){
       actId = id
       sessionStorage.setItem('actid',actId) 
@@ -73,7 +85,10 @@ export const useIdStore =defineStore(
       getInterviewId,
       isBatchId,
       isActId,
-      isInterviewId
+      isInterviewId,
+      setEmail,
+      getEmail,
+      clearEmail
     }
   }
 )
