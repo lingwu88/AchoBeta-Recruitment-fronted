@@ -298,6 +298,7 @@ const submit= async ()=>{
         if(count.value)
           count.value--;
           showModal.value = false
+          router.go(0)
       }
       else{
         message.warning(res.data.message)
@@ -337,6 +338,7 @@ const submit= async ()=>{
         if(count.value)
           count.value--;
           showModal.value = false
+          router.go(0)
       }
       else{
         message.warning(res.data.message)
@@ -385,6 +387,7 @@ const submit= async ()=>{
         if(count.value)
           count.value--;
           showModal.value = false
+          router.go(0)
       }
       else{
         message.warning(res.data.message)
